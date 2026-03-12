@@ -1,0 +1,25 @@
+/*
+
+ * This CSS module contains styles for the Title component.
+ * It defines the appearance of the application's title, including the highlighted portion.
+ */
+
+.header {
+    background-color: #09200e;
+    margin: 0;
+    padding: 20px 0 0;
+}
+
+/* Style for the main title of the application */
+.title {
+    font-family: 'Inter', Arial, sans-serif;
+    font-size: 4rem;
+    color: #dcdcdc;
+    text-align: center;
+    margin: 0;
+}
+
+/* Style for the highlighted portion of the title */
+.highlight {
+    color: #4dff77;
+}
