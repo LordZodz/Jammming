@@ -23,7 +23,7 @@ function SearchResultsContainer(props) {
         <div className={styles.searchResultsContainer}>
             <SearchResults
                 searchResults={mockSearchResults}
-                onAddTrack={props.onAddTrack}
+                onAddSelectedTrack={props.onAddSelectedTrack}
             />
         </div>
     );

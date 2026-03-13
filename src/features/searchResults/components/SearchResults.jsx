@@ -26,7 +26,7 @@ function SearchResults(props) {
                                     className={styles.addButton}
                                     type="button"
                                     aria-label={`Add ${result.name} to playlist`}
-                                    onClick={() => props.onAddTrack(result)}
+                                    onClick={() => props.onAddSelectedTrack(result)}
                                 >
                                     <img
                                         src={plusIcon}

@@ -13,18 +13,14 @@ import styles from './app.module.css';
  */
 
 function App() {
-  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState(null);
 
-  function handleAddTrack(track) {
-    console.log(track);
-    setPlaylistTracks((prev) => {
-      const alreadyAdded = prev.some((item) => item.id === track.id);
-      return alreadyAdded ? prev : [...prev, track];
-    });
+  function handleAddSelectedTrack(track) {
+    setSelectedTrack(track);
   };
 
-  function handleRemoveTrack(trackToRemove) {
-    setPlaylistTracks((prev) => prev.filter((item) => item.id !== trackToRemove.id));
+  function handleClearSelectedTrack() {
+    setSelectedTrack(null);
   };
 
   return (
@@ -33,11 +29,11 @@ function App() {
       <SearchBarContainer />
       <div className={styles.resultsContent}>
         <SearchResultsContainer
-          onAddTrack={handleAddTrack}
+          onAddSelectedTrack={handleAddSelectedTrack}
         />
         <PlaylistContainer
-          playlistTracks={playlistTracks}
-          onRemoveTrack={handleRemoveTrack}
+          selectedTrack={selectedTrack}
+          onClearSelectedTrack={handleClearSelectedTrack}
         />
       </div>
     </div>
