@@ -20,6 +20,7 @@ function SearchResults(props) {
                             <div className={styles.resultItem}>
                                 <p>{result.name}</p>
                                 <p>{result.artist}</p>
+                                <p>{result.album}</p>
                             </div>
                             <div>
                                 <button
@@ -40,7 +41,7 @@ function SearchResults(props) {
 
                     ))
                     ) : (
-                        <p>No results found</p>
+                        <p className={styles.noResults}>No results found</p>
                     )}
             </div>
         </div>

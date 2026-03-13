@@ -21,6 +21,7 @@ function Playlist(props) {
                             <div className={styles.playlistItem}>
                                 <p>{track.name}</p>
                                 <p>{track.artist}</p>
+                                <p>{track.album}</p>
                             </div>
                             <div>
                                 <button
