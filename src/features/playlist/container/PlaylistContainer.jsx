@@ -1,22 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Playlist from '../components/Playlist';
 import styles from '../styles/playlist.module.css';
 
 function PlaylistContainer(props) {
     const [playlistName, setPlaylistName] = useState('');
     const [playlistTracks, setPlaylistTracks] = useState([]);
+    const listType = 'playlistTracks';
 
-    function handleUpdatePlaylistName(name) {
-        setPlaylistName(name);
-    };
-
-    /** This useEffect hook listens for changes to the selectedTrack prop. 
-     * When a new track is selected, it checks if the track is already in the playlistTracks state. 
-     * If it's not already added, it adds the new track to the playlistTracks array. 
-     * This ensures that the playlist is updated whenever a new track is selected from the search results.
-     * If the track is already in the playlist, it prevents adding duplicates.
-     * It then clears the selected track in the parent component to avoid unintended side effects.
-    */
+    // When a new track is selected from the search results, add it to the playlist if it's not already there.
     useEffect(() => {
         if (props.selectedTrack) {
             setPlaylistTracks((prev) => {
@@ -26,6 +17,10 @@ function PlaylistContainer(props) {
             props.onClearSelectedTrack();
         }
     }, [props.selectedTrack]);
+
+    function handleUpdatePlaylistName(name) {
+        setPlaylistName(name);
+    };
 
     function handleRemoveTrack(trackToRemove) {
         setPlaylistTracks((prev) => prev.filter((item) => item.id !== trackToRemove.id));
@@ -47,8 +42,9 @@ function PlaylistContainer(props) {
             <Playlist
                 playlistName={playlistName}
                 playlistTracks={playlistTracks}
-                onRemoveTrack={handleRemoveTrack}
+                listType={listType}
                 onUpdatePlaylistName={handleUpdatePlaylistName}
+                onRemovePlaylistTrack={handleRemoveTrack}
                 onSubmitPlaylist={handleSubmitPlaylist}
             />
         </div>

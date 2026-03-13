@@ -1,5 +1,5 @@
 import styles from '../styles/searchResults.module.css';
-import plusIcon from '../../../assets/images/plus.svg';
+import TracklistContainer from '../../tracklist/containers/TracklistContainer';
 
 /**
  * This presentation component is responsible for rendering the search results in the application. 
@@ -14,35 +14,15 @@ function SearchResults(props) {
         <div className={styles.searchResults}>
             <h2 className={styles.h2}>Search Results</h2>
             <div className={styles.resultsList}>
-                {props.searchResults.length > 0
-                    ? (props.searchResults.map((result) => (
-                        <div key={result.id} className={styles.resultItemContainer}>
-                            <div className={styles.resultItem}>
-                                <p>{result.name}</p>
-                                <p>{result.artist}</p>
-                                <p>{result.album}</p>
-                            </div>
-                            <div>
-                                <button
-                                    className={styles.addButton}
-                                    type="button"
-                                    aria-label={`Add ${result.name} to playlist`}
-                                    onClick={() => props.onAddSelectedTrack(result)}
-                                >
-                                    <img
-                                        src={plusIcon}
-                                        alt=""
-                                        aria-hidden="true"
-                                        className={styles.addIcon}
-                                    />
-                                </button>
-                            </div>
-                        </div>
-
-                    ))
-                    ) : (
-                        <p className={styles.noResults}>No results found</p>
-                    )}
+                {props.searchResults.length === 0 ? (
+                    <p className={styles.noResults}>No search results found. Please try a different search term.</p>
+                ) : (
+                    <TracklistContainer
+                        tracklist={props.searchResults}
+                        listType='searchResults'
+                        onAddSelectedTrack={props.onAddSelectedTrack}
+                    />
+                )}
             </div>
         </div>
     );

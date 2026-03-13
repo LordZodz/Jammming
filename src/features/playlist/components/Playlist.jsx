@@ -1,5 +1,6 @@
 import styles from '../styles/playlist.module.css';
 import minusIcon from '../../../assets/images/minus.svg';
+import TracklistContainer from '../../tracklist/containers/TracklistContainer';
 
 function Playlist(props) {
 
@@ -15,33 +16,15 @@ function Playlist(props) {
                 />
             </h2>
             <div className={styles.playlistList}>
-                {props.playlistTracks.length > 0
-                    ? props.playlistTracks.map((track) => (
-                        <div key={track.id} className={styles.playlistItemContainer}>
-                            <div className={styles.playlistItem}>
-                                <p>{track.name}</p>
-                                <p>{track.artist}</p>
-                                <p>{track.album}</p>
-                            </div>
-                            <div>
-                                <button
-                                    className={styles.removeButton}
-                                    type="button"
-                                    aria-label={`Remove ${track.name} from playlist`}
-                                    onClick={() => props.onRemoveTrack(track)}
-                                >
-                                    <img
-                                        src={minusIcon}
-                                        alt=""
-                                        aria-hidden="true"
-                                        className={styles.removeIcon}
-                                    />
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                    : <p className={styles.noTracks}>No tracks added</p>
-                }
+                {props.playlistTracks.length === 0 ? (
+                    <p className={styles.noTracks}>No tracks in playlist. Please add some tracks from the search results.</p>
+                ) : (
+                    <TracklistContainer
+                        tracklist={props.playlistTracks}
+                        listType={props.listType}
+                        onRemovePlaylistTrack={props.onRemovePlaylistTrack}
+                    />
+                )}
                 <button
                     className={styles.saveButton}
                     type="button"
