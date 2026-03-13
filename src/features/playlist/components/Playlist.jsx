@@ -10,6 +10,7 @@ function Playlist(props) {
                     type="text"
                     className={styles.playlistNameInput}
                     value={props.playlistName}
+                    placeholder='Type playlist name'
                     onChange={(e) => props.onUpdatePlaylistName(e.target.value)}
                 />
             </h2>

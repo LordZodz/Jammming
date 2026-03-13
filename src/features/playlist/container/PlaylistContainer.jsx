@@ -3,7 +3,7 @@ import Playlist from '../components/Playlist';
 import styles from '../styles/playlist.module.css';
 
 function PlaylistContainer(props) {
-    const [playlistName, setPlaylistName] = useState('New Playlist');
+    const [playlistName, setPlaylistName] = useState('');
     const [playlistTracks, setPlaylistTracks] = useState([]);
 
     function handleUpdatePlaylistName(name) {
