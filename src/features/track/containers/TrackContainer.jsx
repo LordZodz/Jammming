@@ -22,6 +22,7 @@ function TrackContainer(props) {
             name={track.name}
             artist={track.artist}
             album={track.album}
+            image={track.image}
             uri={track.uri}
             listType={props.listType}
             onAddSelectedTrack={props.onAddSelectedTrack}

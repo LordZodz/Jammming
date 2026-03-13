@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchResults from '../components/SearchResults';
 import styles from '../styles/searchResults.module.css';
-import mockSearchResults from '../../../data/mockSearchResults';
+import { Spotify } from '../../../util/Spotify/Spotify';
 
 /**
  * This container component is responsible for managing the state and logic related to the search results in the application. 
@@ -14,10 +14,25 @@ function SearchResultsContainer(props) {
     const [searchResults, setSearchResults] = useState([]);
     const listType = 'searchResults';
 
+    useEffect(() => {
+        async function fetchResults() {
+            if (!props.submittedSearchTerm) {
+                setSearchResults([]);
+                return;
+            }
+
+            const results = await Spotify.search(props.submittedSearchTerm);
+            setSearchResults(results);
+            console.log('Fetched search results:', results);
+        };
+
+        fetchResults();
+    }, [props.submittedSearchTerm]);
+
     return (
         <div className={styles.searchResultsContainer}>
             <SearchResults
-                searchResults={mockSearchResults}
+                searchResults={searchResults}
                 listType={listType}
                 onAddSelectedTrack={props.onAddSelectedTrack}
             />

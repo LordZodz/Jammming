@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import SearchBar from '../components/SearchBar';
 
 /** 
@@ -8,14 +8,12 @@ import SearchBar from '../components/SearchBar';
  * @returns {JSX.Element} The rendered SearchBar component with its associated logic.
  */
 
-function SearchBarContainer() {
+function SearchBarContainer(props) {
     const [searchTerm, setSearchTerm] = useState('');
 
     function handleSubmit(e) {
         e.preventDefault();
-        // temporary alert to show the search term when the form is submitted
-        // TODO: replace this with actual search functionality that interacts with the Spotify API
-        alert(`Searching for: ${searchTerm}`);
+        props.onSearch(searchTerm.trim());
     };
 
     return (

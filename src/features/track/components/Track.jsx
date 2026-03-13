@@ -12,10 +12,16 @@ import removeIcon from '../../../assets/images/minus.svg';
 function Track(props) {
     return (
         <div id={props.id} className={styles.trackBox}>
-            <div className={styles.trackInfo}>
-                <p>{props.name}</p>
-                <p>{props.artist}</p>
-                <p>{props.album}</p>
+            <div className={styles.trackDetails}>
+                <div className={styles.albumCoverContainer}>
+                    <img src={props.image} alt={`${props.name} album cover`} className={styles.albumCover} />
+                </div>
+                <div className={styles.textInfo}>
+                    <p>{props.name}</p>
+                    <div className={styles.artistAlbum}>
+                        <p>{props.artist} • {props.album}</p>
+                    </div>
+                </div>
             </div>
             <div>
                 {props.listType === 'searchResults' && (

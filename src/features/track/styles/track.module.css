@@ -8,13 +8,33 @@
     align-items: center;
 }
 
-.trackInfo {
+.trackDetails {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+}
+
+.albumCoverContainer {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.albumCover {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.textInfo {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.trackInfo p {
+.textInfo p {
     margin: 0;
 }
 

@@ -14,6 +14,7 @@ import styles from './app.module.css';
 
 function App() {
   const [selectedTrack, setSelectedTrack] = useState(null);
+  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
 
   function handleAddSelectedTrack(track) {
     setSelectedTrack(track);
@@ -23,12 +24,17 @@ function App() {
     setSelectedTrack(null);
   };
 
+  function handleSearch(term) {
+    setSubmittedSearchTerm(term);
+  };
+
   return (
     <div className={styles.app}>
       <Header />
-      <SearchBarContainer />
+      <SearchBarContainer onSearch={handleSearch} />
       <div className={styles.resultsContent}>
         <SearchResultsContainer
+          submittedSearchTerm={submittedSearchTerm}
           onAddSelectedTrack={handleAddSelectedTrack}
         />
         <PlaylistContainer
