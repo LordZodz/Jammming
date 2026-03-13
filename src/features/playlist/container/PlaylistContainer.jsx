@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Playlist from '../components/Playlist';
 import styles from '../styles/playlist.module.css';
+import { Spotify } from '../../../util/Spotify/Spotify';
 
 function PlaylistContainer(props) {
     const [playlistName, setPlaylistName] = useState('');
@@ -31,21 +32,26 @@ function PlaylistContainer(props) {
      * and then resetting the playlist name and tracks back to their default states. 
      * 
     */
-    function handleSubmitPlaylist() {
+    async function handleSubmitPlaylist() {
         const trackUris = playlistTracks.map((track) => track.uri);
         
         if (!playlistName || trackUris.length === 0) {
             alert('Please enter a playlist name and add at least one track before submitting.');
             return;
         };
-        
-        console.log('Submitting playlist:', playlistName, trackUris);
-        handleClearPlaylist();
+
+        const response = await Spotify.savePlaylist(playlistName, trackUris);
+
+        if (response.ok) {
+            alert('Playlist saved successfully!');
+            handleClearPlaylist();
+        } else {
+            alert('There was an error saving your playlist. Please try again.');
+        };
     };
 
     function handleClearPlaylist() {
-        setPlaylistName('New Playlist');
-        playlistTracks.forEach((track) => handleRemoveTrack(track));
+        setPlaylistName('');
         setPlaylistTracks([]);
     };
 

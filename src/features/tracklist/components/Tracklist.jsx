@@ -12,16 +12,17 @@ import TrackContainer from '../../track/containers/TrackContainer';
 function Tracklist(props) {
     return (
         <>
-            {props.tracks.map((track) => (
-                <TrackContainer
-                    key={track.id}
-                    trackInfo={track}
-                    listType={props.listType}
-                    onAddSelectedTrack={props.onAddSelectedTrack}
-                    onRemovePlaylistTrack={props.onRemovePlaylistTrack}
-                />
-            ))
-        }
+            {props.tracks.length > 0 && (
+                props.tracks.map((track) => (
+                    <TrackContainer
+                        key={track.id}
+                        trackInfo={track}
+                        listType={props.listType}
+                        onAddSelectedTrack={props.onAddSelectedTrack}
+                        onRemovePlaylistTrack={props.onRemovePlaylistTrack}
+                    />
+                ))
+            )}
         </>
     );
 };

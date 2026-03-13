@@ -140,14 +140,14 @@ const Spotify = {
         // Ensure that a search query is provided before attempting to make the API request.
         if (!query) {
             console.error("Search query is required.");
-            return [];
+            return { ok: false };
         };
 
         // Retrieve a valid access token before making the API request to search for tracks.
         const token = await Spotify.getAccessToken();
         if (!token) {
             console.error("No access token available.");
-            return [];
+            return { ok: false };
         };
 
         return fetch(`${urlBaseApi}/search?type=track&q=${encodeURIComponent(query)}`, {
@@ -158,7 +158,7 @@ const Spotify = {
             .then((jsonResponse) => {
                 if (!jsonResponse || typeof jsonResponse !== "object" || !jsonResponse.tracks) {
                     console.error("Invalid response from Spotify API:", jsonResponse);
-                    return [];
+                    return { ok: false };
                 };
                 return jsonResponse.tracks.items.map((t) => ({
                     id: t.id,
@@ -177,42 +177,60 @@ const Spotify = {
         // If either is missing, log an error and return without making the API request.
         if (!name || !trackUris.length) {
             console.error("Playlist name and track URIs are required to save a playlist.");
-            return;
+            return { ok: false };
         };
 
         // Retrieve a valid access token before making the API requests to create the playlist and add tracks to it.
         const token = await Spotify.getAccessToken();
+
+        if (!token) {
+            console.error("No access token available.");
+            return { ok: false };
+        };
+
         const headers = { Authorization: `Bearer ${token}` };
-        let userId;
 
-        // Make a series of API requests to create a new playlist and add tracks to it.
-        return fetch(`${urlBaseApi}/me`, { headers })
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                userId = jsonResponse.id;
-
-                return fetch(`${urlBaseApi}/users/${userId}/playlists`, {
-                    method: "POST",
-                    headers: {
-                        ...headers,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ name }),
-                });
-            })
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                const playlistId = jsonResponse.id;
-
-                return fetch(`${urlBaseApi}/playlists/${playlistId}/tracks`, {
-                    method: "POST",
-                    headers: {
-                        ...headers,
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ uris: trackUris }),
-                });
+        try {
+            const createPlaylistResponse = await fetch(`${urlBaseApi}/me/playlists`, {
+                method: "POST",
+                headers: {
+                    ...headers,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    public: false,
+                }),
             });
+
+            const createPlaylistData = await createPlaylistResponse.json();
+
+            if (!createPlaylistResponse.ok) {
+                console.error("Playlist creation failed:", createPlaylistData);
+                return { ok: false, error: createPlaylistData };
+            }
+
+            const addTracksResponse = await fetch(`${urlBaseApi}/playlists/${createPlaylistData.id}/items`, {
+                method: "POST",
+                headers: {
+                    ...headers,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ uris: trackUris }),
+            });
+
+            const addTracksData = await addTracksResponse.json();
+
+            if (!addTracksResponse.ok) {
+                console.error("Adding tracks failed:", addTracksData);
+                return { ok: false, error: addTracksData };
+            }
+
+            return { ok: true, playlistId: createPlaylistData.id, snapshotId: addTracksData.snapshot_id };
+        } catch (error) {
+            console.error("Unexpected error saving playlist:", error);
+            return { ok: false, error };
+        }
     },
 };
 

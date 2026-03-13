@@ -23,7 +23,6 @@ function SearchResultsContainer(props) {
 
             const results = await Spotify.search(props.submittedSearchTerm);
             setSearchResults(results);
-            console.log('Fetched search results:', results);
         };
 
         fetchResults();
