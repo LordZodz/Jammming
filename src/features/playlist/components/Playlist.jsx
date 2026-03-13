@@ -39,7 +39,7 @@ function Playlist(props) {
                             </div>
                         </div>
                     ))
-                    : <p>No tracks added</p>
+                    : <p className={styles.noTracks}>No tracks added</p>
                 }
                 <button
                     className={styles.saveButton}
