@@ -15,10 +15,7 @@ function Tracklist(props) {
             {props.tracks.map((track) => (
                 <TrackContainer
                     key={track.id}
-                    id={track.id}
-                    name={track.name}
-                    artist={track.artist}
-                    album={track.album}
+                    trackInfo={track}
                     listType={props.listType}
                     onAddSelectedTrack={props.onAddSelectedTrack}
                     onRemovePlaylistTrack={props.onRemovePlaylistTrack}

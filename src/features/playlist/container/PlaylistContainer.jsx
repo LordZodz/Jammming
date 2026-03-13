@@ -26,8 +26,20 @@ function PlaylistContainer(props) {
         setPlaylistTracks((prev) => prev.filter((item) => item.id !== trackToRemove.id));
     };
 
+    /** Implement most of the functionality for creating an array of uris from the playlist tracks, 
+     *  sending that array and the playlist name to the Spotify API, 
+     * and then resetting the playlist name and tracks back to their default states. 
+     * 
+    */
     function handleSubmitPlaylist() {
-        alert('Save playlist functionality not implemented yet');
+        const trackUris = playlistTracks.map((track) => track.uri);
+        
+        if (!playlistName || trackUris.length === 0) {
+            alert('Please enter a playlist name and add at least one track before submitting.');
+            return;
+        };
+        
+        console.log('Submitting playlist:', playlistName, trackUris);
         handleClearPlaylist();
     };
 

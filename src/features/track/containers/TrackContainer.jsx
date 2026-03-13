@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Track from '../components/Track';
 
 /** 
@@ -9,13 +9,12 @@ import Track from '../components/Track';
  */
 
 function TrackContainer(props) {
-    const [track, setTrack] = useState({
-        id: props.id,
-        name: props.name,
-        artist: props.artist,
-        album: props.album,
-        listType: props.listType
-    });
+    const [track, setTrack] = useState({});
+
+    // When the component receives new track information through props, update the local state to reflect the new track data.
+    useEffect(() => {
+        setTrack(props.trackInfo);
+    }, [props.trackInfo]);
 
     return (
         <Track
@@ -23,7 +22,8 @@ function TrackContainer(props) {
             name={track.name}
             artist={track.artist}
             album={track.album}
-            listType={track.listType}
+            uri={track.uri}
+            listType={props.listType}
             onAddSelectedTrack={props.onAddSelectedTrack}
             onRemovePlaylistTrack={props.onRemovePlaylistTrack}
         />

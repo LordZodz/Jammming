@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Header from '../features/header/components/Header';
 import SearchBarContainer from '../features/searchBar/containers/SearchBarContainer';
 import SearchResultsContainer from '../features/searchResults/container/SearchResultsContainer';
