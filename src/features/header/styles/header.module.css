@@ -11,15 +11,17 @@
 }
 
 /* Style for the main title of the application */
-.title {
+.h1 {
     font-family: 'Inter', Arial, sans-serif;
     font-size: 4rem;
-    color: #dcdcdc;
-    text-align: center;
     margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 25px;
 }
 
 /* Style for the highlighted portion of the title */
 .highlight {
-    color: #4dff77;
+    color: var(--brand-color);
 }

@@ -12,7 +12,7 @@ function Header() {
 
     return (
         <header className={styles.header}>
-            <h1 className={styles.title}>Ja<span className={styles.highlight}>mmm</span>ing</h1>
+            <h1 className={styles.h1}>Ja<span className={styles.highlight}>mmm</span>ing</h1>
         </header>
     );
 };

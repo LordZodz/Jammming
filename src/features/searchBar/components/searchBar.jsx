@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './styles/SearchBar.module.css';
+import styles from '../styles/searchBar.module.css';
 
 /**
  * This presentation component is responsible for rendering the search bar in the application. 
@@ -8,12 +8,29 @@ import styles from './styles/SearchBar.module.css';
  * @returns {JSX.Element} The rendered SearchBar component.
  */
 
-function SearchBar() {
+function SearchBar(props) {
 
     return (
-        <div className={styles.SearchBar}>
-            <input placeholder="Enter A Song, Album, or Artist" />
-            <button className={styles.SearchButton}>SEARCH</button>
+        <div className={styles.searchBar}>
+            <form 
+                className={styles.searchForm}
+                onSubmit={props.handleSubmit}
+                >
+                <input
+                    className={styles.searchInput}
+                    placeholder="Enter A Song, Album, or Artist"
+                    value={props.searchTerm}
+                    onChange={(e) => props.setSearchTerm(e.target.value)}
+                />
+                <button
+                    className={styles.searchButton}
+                    type="submit"
+                    aria-label="Search"
+                    disabled={!props.searchTerm.trim()}
+                >
+                    SEARCH
+                </button>
+            </form>
         </div>
     );
 };

@@ -1,0 +1,18 @@
+/* 
+ * This CSS module contains styles for the App component.
+ * It is used to style the main content area of the application.
+ */
+
+.app {
+    margin: 0 auto;
+}
+
+.resultsContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    justify-items: center;
+    gap: 20px;
+}

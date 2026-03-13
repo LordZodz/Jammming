@@ -1,10 +1,14 @@
 :root {
     --font-primary: 'Inter', Arial, sans-serif;
+    --font-color-default: #dcdcdc;
+    --brand-color: #1ed760;
+    --brand-color-hover: #44ea7e;
 }
 
 body {
     margin: 0;
     padding: 0;
     background-color: #23482b;
+    color: var(--font-color-default);
     font-family: var(--font-primary);
-};
+}
