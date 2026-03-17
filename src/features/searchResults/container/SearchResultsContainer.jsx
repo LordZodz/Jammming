@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import SearchResults from '../components/SearchResults';
 import styles from '../styles/searchResults.module.css';
-import { Spotify } from '../../../util/Spotify/Spotify';
+import { Spotify } from '../../../util/spotify/index';
 
 /**
  * This container component is responsible for managing the state and logic related to the search results in the application. 
@@ -22,7 +22,8 @@ function SearchResultsContainer(props) {
             }
 
             const results = await Spotify.search(props.submittedSearchTerm);
-            setSearchResults(results);
+            const { tracks } = results;
+            setSearchResults(tracks || []);
         };
 
         fetchResults();
