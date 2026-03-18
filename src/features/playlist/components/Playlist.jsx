@@ -1,5 +1,4 @@
 import styles from '../styles/playlist.module.css';
-import minusIcon from '../../../assets/images/minus.svg';
 import TracklistContainer from '../../tracklist/containers/TracklistContainer';
 
 function Playlist(props) {

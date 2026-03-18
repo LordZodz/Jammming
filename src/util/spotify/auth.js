@@ -1,67 +1,7 @@
 import { SPOTIFY_ACCOUNTS_BASE_URL, TOKEN_ENDPOINT, AUTH_ENDPOINT, STORAGE_KEYS, SCOPES, clientId, redirectUrl } from "./config";
+import { generateCodeVerifier, generateCodeChallenge, generateRandomString } from "./pkce";
+import { getStoredToken, setStoredToken, clearStoredToken, clearAuthStorage } from "./storage";
 import { parseJsonResponse } from "./parse";
-
-let accessToken = '';
-let expiresAt = 0;
-
-/**
- * Helper function to perform base64 URL encoding, which is required for the PKCE code challenge.
- * 
- * @param {Uint8Array} bytes The input byte array to encode
- * @returns {string} Base64 URL encoded string
- */
-function base64UrlEncode(bytes) {
-    let binary = '';
-    bytes.forEach((byte) => {
-        binary += String.fromCharCode(byte);
-    });
-
-    return btoa(binary)
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
-};
-
-/**
- * Generates a random string of the specified length using a secure random number generator.
- * 
- * @param {*} length The desired length of the generated string (default is 64 characters)
- * @returns {string} A securely generated random string
- */
-function generateRandomString(length = 64) {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-    const randomValues = new Uint8Array(length);
-    crypto.getRandomValues(randomValues);
-
-    let result = '';
-    for (let i = 0; i < length; i += 1) {
-        result += charset[randomValues[i] % charset.length];
-    }
-
-    return result;
-};
-
-/**
- * Generates a code verifier for the PKCE flow.
- * 
- * @param {*} length The desired length of the code verifier (default is 128 characters)
- * @returns {string} A securely generated code verifier string
- */
-function generateCodeVerifier(length = 128) {
-    return generateRandomString(length);
-};
-
-/**
- * Generates a code challenge for the PKCE flow based on the provided code verifier.
- * 
- * @param {*} codeVerifier The code verifier string for which to generate the code challenge
- * @returns {Promise<string>} A promise that resolves to the generated code challenge string
- */
-async function generateCodeChallenge(codeVerifier) {
-    const data = new TextEncoder().encode(codeVerifier);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-    return base64UrlEncode(new Uint8Array(digest));
-};
 
 /**
  * Clears any query parameters from the URL after the authentication process is complete to 
@@ -69,66 +9,6 @@ async function generateCodeChallenge(codeVerifier) {
  */
 function clearCallbackParams() {
     window.history.replaceState({}, document.title, window.location.pathname);
-};
-
-/**
- * Retrieves the stored access token from memory or sessionStorage if it is still valid. 
- * If the token has expired or is not found, it clears any stored token information and returns null.
- * 
- * @returns {string|null} The valid access token if available, otherwise null
- */
-function getStoredToken() {
-    if (accessToken && expiresAt > Date.now()) {
-        return accessToken;
-    }
-
-    const storedToken = sessionStorage.getItem(STORAGE_KEYS.accessToken);
-    const storedExpiresAt = Number(sessionStorage.getItem(STORAGE_KEYS.expiresAt) || 0);
-
-    if (storedToken && storedExpiresAt > Date.now()) {
-        accessToken = storedToken;
-        expiresAt = storedExpiresAt;
-
-        return accessToken;
-    }
-
-    clearStoredToken();
-    return null;
-};
-
-/**
- * Stores the access token and its expiration time in memory and sessionStorage.
- * 
- * @param {*} token The access token to store
- * @param {*} expiresInSeconds The number of seconds until the token expires, used to calculate the expiration time
- */
-function setStoredToken(token, expiresInSeconds) {
-    accessToken = token;
-    expiresAt = Date.now() + expiresInSeconds * 1000;
-
-    sessionStorage.setItem(STORAGE_KEYS.accessToken, token);
-    sessionStorage.setItem(STORAGE_KEYS.expiresAt, String(expiresAt));
-}
-
-/**
- * Clears the stored access token from memory and sessionStorage, 
- * effectively logging the user out of Spotify and requiring re-authentication for future API requests.
- */
-function clearStoredToken() {
-    accessToken = '';
-    expiresAt = 0;
-
-    sessionStorage.removeItem(STORAGE_KEYS.accessToken);
-    sessionStorage.removeItem(STORAGE_KEYS.expiresAt);
-};
-
-/**
- * Clears the PKCE code verifier and state from localStorage, 
- * which are used during the authentication process.
- */
-function clearAuthStorage() {
-    localStorage.removeItem(STORAGE_KEYS.codeVerifier);
-    localStorage.removeItem(STORAGE_KEYS.authState);
 };
 
 /**
