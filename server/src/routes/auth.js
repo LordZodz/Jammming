@@ -1,24 +1,16 @@
 import express from 'express';
 import { generateRandomString } from '../util/authHelpers.js';
-import {
-    SCOPES,
-    SPOTIFY_ACCOUNTS_BASE_URL,
-    TOKEN_ENDPOINT,
-    AUTH_ENDPOINT,
-    AUTH_CALLBACK,
-} from '../config/config.js';
+import { SCOPES, SPOTIFY_ACCOUNTS_BASE_URL, TOKEN_ENDPOINT, AUTH_ENDPOINT, AUTH_CALLBACK_ENDPOINT } from '../config/config.js';
+import { getAccessToken, setTokenData } from '../storage/storage.js';
 
 const router = express.Router();
 
 const STATE_COOKIE = 'spotify_auth_state';
 
-let access_token = '';
-let expires_in = 3600;
-
 router.get('/login', (req, res) => {
     console.log('Initiating Spotify login flow');
     const state = generateRandomString(16);
-    const redirectUri = process.env.SERVER_BASE_URL + AUTH_CALLBACK;
+    const redirectUri = process.env.SERVER_BASE_URL + AUTH_CALLBACK_ENDPOINT;
     const spotifyAuthUrl = `${SPOTIFY_ACCOUNTS_BASE_URL}${AUTH_ENDPOINT}`;
 
     res.cookie(STATE_COOKIE, state, { httpOnly: true, sameSite: 'lax' });
@@ -66,7 +58,7 @@ router.get('/callback', async (req, res) => {
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        redirect_uri: process.env.SERVER_BASE_URL + AUTH_CALLBACK,
+        redirect_uri: process.env.SERVER_BASE_URL + AUTH_CALLBACK_ENDPOINT,
     });
 
     try {
@@ -89,8 +81,7 @@ router.get('/callback', async (req, res) => {
 
         console.log('Token exchange successful. Received access token from Spotify.');
 
-        access_token = data.access_token;
-        expires_in = data.expires_in || 3600;
+        setTokenData(data.access_token, data.expires_in || 3600);
 
         res.redirect(clientBaseUrl);
     } catch (err) {
@@ -100,7 +91,10 @@ router.get('/callback', async (req, res) => {
 });
 
 router.get('/token', (req, res) => {
-    res.json({ access_token, expires_in });
+    console.log('Received request for access token');
+    const token = getAccessToken();
+    if (!token) return res.status(401).json({ error: 'No valid access token' });
+    res.json({ access_token: token });
 });
 
 export default router;

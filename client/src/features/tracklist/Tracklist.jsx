@@ -1,4 +1,4 @@
-import TrackContainer from '../track/TrackContainer';
+import Track from '../track/Track';
 
 /** 
  * This presentation component is responsible for rendering a list of tracks in the application. 
@@ -13,9 +13,9 @@ function Tracklist(props) {
         <>
             {props.tracks.length > 0 && (
                 props.tracks.map((track) => (
-                    <TrackContainer
+                    <Track
                         key={track.id}
-                        trackInfo={track}
+                        track={track}
                         listType={props.listType}
                         onAddSelectedTrack={props.onAddSelectedTrack}
                         onRemovePlaylistTrack={props.onRemovePlaylistTrack}

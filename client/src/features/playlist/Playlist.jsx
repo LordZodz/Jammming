@@ -1,5 +1,5 @@
 import styles from './playlist.module.css';
-import TracklistContainer from '../tracklist/TracklistContainer';
+import Tracklist from '../tracklist/Tracklist';
 
 function Playlist(props) {
 
@@ -19,8 +19,8 @@ function Playlist(props) {
                     {props.playlistTracks.length === 0 ? (
                         <p className={styles.noTracks}>No tracks in playlist. Please add some tracks from the search results.</p>
                     ) : (
-                        <TracklistContainer
-                            tracklist={props.playlistTracks}
+                        <Tracklist
+                            tracks={props.playlistTracks}
                             listType={props.listType}
                             onRemovePlaylistTrack={props.onRemovePlaylistTrack}
                         />

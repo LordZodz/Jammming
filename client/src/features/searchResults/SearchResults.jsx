@@ -1,5 +1,5 @@
 import styles from './searchResults.module.css';
-import TracklistContainer from '../tracklist/TracklistContainer';
+import Tracklist from '../tracklist/Tracklist';
 
 /**
  * This presentation component is responsible for rendering the search results in the application. 
@@ -18,8 +18,8 @@ function SearchResults(props) {
                     {props.searchResults.length === 0 ? (
                         <p className={styles.noResults}>No search results found. Please try a different search term.</p>
                     ) : (
-                        <TracklistContainer
-                            tracklist={props.searchResults}
+                        <Tracklist
+                            tracks={props.searchResults}
                             listType='searchResults'
                             onAddSelectedTrack={props.onAddSelectedTrack}
                         />

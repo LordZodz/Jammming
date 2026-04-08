@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import SearchResults from './SearchResults';
-import { Spotify } from '../../util/spotify/index';
+import { Spotify } from '../../utils/api_spotify/spotify';
 
 /**
  * This container component is responsible for managing the state and logic related to the search results in the application. 
@@ -11,7 +11,6 @@ import { Spotify } from '../../util/spotify/index';
 
 function SearchResultsContainer(props) {
     const [searchResults, setSearchResults] = useState([]);
-    const listType = 'searchResults';
 
     useEffect(() => {
         const fetchResults = async () => {
@@ -31,7 +30,6 @@ function SearchResultsContainer(props) {
     return (
         <SearchResults
             searchResults={searchResults}
-            listType={listType}
             onAddSelectedTrack={props.onAddSelectedTrack}
         />
     );

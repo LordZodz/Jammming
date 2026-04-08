@@ -1,16 +1,18 @@
 import { search, savePlaylist } from './api';
-import { getAccessToken, clearStoredToken } from './auth';
+
+const AUTH_LOGIN = "/auth/login";
+const AUTH_TOKEN = "/auth/token";
 
 /**
  * The Spotify object serves as a centralized interface for interacting with the Spotify API.
  */
 const Spotify = {
-    getAccessToken,
     search,
-    savePlaylist,
-    clearSession() {
-        clearStoredToken();
-    },
+    savePlaylist
 };
 
-export { Spotify };
+export { 
+    Spotify,
+    AUTH_LOGIN,
+    AUTH_TOKEN, 
+};

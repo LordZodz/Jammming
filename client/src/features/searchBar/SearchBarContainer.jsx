@@ -17,13 +17,11 @@ function SearchBarContainer(props) {
     };
 
     return (
-        <div>
-            <SearchBar
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                handleSubmit={handleSubmit}
-            />
-        </div>
+        <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            handleSubmit={handleSubmit}
+        />
     );
 };
 

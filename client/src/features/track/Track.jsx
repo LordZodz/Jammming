@@ -11,15 +11,15 @@ import removeIcon from '../../assets/images/minus.svg';
 
 function Track(props) {
     return (
-        <div id={props.id} className={styles.trackBox}>
+        <div id={props.track.id} className={styles.trackBox}>
             <div className={styles.trackDetails}>
                 <div className={styles.albumCoverContainer}>
-                    <img src={props.image} alt={`${props.name} album cover`} className={styles.albumCover} />
+                    <img src={props.track.image} alt={`${props.track.name} album cover`} className={styles.albumCover} />
                 </div>
                 <div className={styles.textInfo}>
-                    <p>{props.name}</p>
+                    <p>{props.track.name}</p>
                     <div className={styles.artistAlbum}>
-                        <p>{props.artist} • {props.album}</p>
+                        <p>{props.track.artist} • {props.track.album}</p>
                     </div>
                 </div>
             </div>
@@ -28,8 +28,8 @@ function Track(props) {
                     <button
                         className={styles.addButton}
                         type="button"
-                        aria-label={`Add ${props.name} to playlist`}
-                        onClick={() => props.onAddSelectedTrack(props)}
+                        aria-label={`Add ${props.track.name} to playlist`}
+                        onClick={() => props.onAddSelectedTrack(props.track)}
                     >
                         <img
                             src={addIcon}
@@ -43,8 +43,8 @@ function Track(props) {
                     <button
                         className={styles.removeButton}
                         type="button"
-                        aria-label={`Remove ${props.name} from playlist`}
-                        onClick={() => props.onRemovePlaylistTrack(props)}
+                        aria-label={`Remove ${props.track.name} from playlist`}
+                        onClick={() => props.onRemovePlaylistTrack(props.track)}
                     >
                         <img
                             src={removeIcon}

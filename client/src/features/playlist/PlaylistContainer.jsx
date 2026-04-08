@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Playlist from './Playlist';
-import { Spotify } from '../../util/spotify/index';
+import { Spotify } from '../../utils/api_spotify/spotify';
 
 function PlaylistContainer(props) {
     const [playlistName, setPlaylistName] = useState('');

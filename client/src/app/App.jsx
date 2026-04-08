@@ -4,8 +4,8 @@ import SearchBarContainer from '../features/searchBar/SearchBarContainer';
 import SearchResultsContainer from '../features/searchResults/SearchResultsContainer';
 import PlaylistContainer from '../features/playlist/PlaylistContainer';
 import styles from './app.module.css';
-import LoginContainer from '../features/login/LoginContainer';
-import { AUTH_TOKEN } from '../util/config/spotifyConfig';
+import Login from '../features/login/Login';
+import { AUTH_TOKEN } from '../utils/api_spotify/spotify';
 
 /**
  * This is the main App component of the React application.
@@ -15,7 +15,7 @@ import { AUTH_TOKEN } from '../util/config/spotifyConfig';
  */
 
 function App() {
-  const [token, setToken] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
 
@@ -24,18 +24,13 @@ function App() {
       try {
         const backendTokenUrl = `${import.meta.env.VITE_SERVER_BASE_URL}${AUTH_TOKEN}`;
 
-        const response = await fetch(backendTokenUrl);
-        const json = await response.json();
-
-        // console.log('Token response status:', response.status);
-        // console.log('Token response JSON:', json);
-
+        const response = await fetch(backendTokenUrl, { credentials: 'include' });
         if (!response.ok) {
-          console.error('Failed to fetch access token from server:', json);
+          console.error('No valid session on server:', response.statusText);
           return;
         }
 
-        setToken(json.access_token);
+        setIsAuthenticated(true);
       } catch (error) {
         // If the server is down or there is a network error, log the error and allow the app to render the login screen
         if (error instanceof TypeError) {
@@ -64,8 +59,8 @@ function App() {
   return (
     <div className={styles.app}>
       <Header />
-      {(token === '')
-        ? <LoginContainer token={token} />
+      {!isAuthenticated
+        ? <Login />
         : <>
           <SearchBarContainer onSearch={handleSearch} />
           <div className={styles.resultsContent}>
