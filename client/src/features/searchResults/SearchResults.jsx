@@ -1,4 +1,4 @@
-import styles from '../styles/searchResults.module.css';
+import styles from './searchResults.module.css';
 import TracklistContainer from '../tracklist/TracklistContainer';
 
 /**
@@ -11,18 +11,20 @@ import TracklistContainer from '../tracklist/TracklistContainer';
 function SearchResults(props) {
 
     return (
-        <div className={styles.searchResults}>
-            <h2 className={styles.h2}>Search Results</h2>
-            <div className={styles.resultsList}>
-                {props.searchResults.length === 0 ? (
-                    <p className={styles.noResults}>No search results found. Please try a different search term.</p>
-                ) : (
-                    <TracklistContainer
-                        tracklist={props.searchResults}
-                        listType='searchResults'
-                        onAddSelectedTrack={props.onAddSelectedTrack}
-                    />
-                )}
+        <div className={styles.searchResultsContainer}>
+            <div className={styles.searchResults}>
+                <h2 className={styles.h2}>Search Results</h2>
+                <div className={styles.resultsList}>
+                    {props.searchResults.length === 0 ? (
+                        <p className={styles.noResults}>No search results found. Please try a different search term.</p>
+                    ) : (
+                        <TracklistContainer
+                            tracklist={props.searchResults}
+                            listType='searchResults'
+                            onAddSelectedTrack={props.onAddSelectedTrack}
+                        />
+                    )}
+                </div>
             </div>
         </div>
     );

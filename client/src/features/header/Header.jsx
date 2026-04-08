@@ -1,4 +1,4 @@
-import styles from '../styles/header.module.css';
+import styles from './header.module.css';
 
 /**
  * This presentation component is responsible for rendering the header of the application. 

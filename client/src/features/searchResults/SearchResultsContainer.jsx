@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import SearchResults from './SearchResults';
-import styles from '../styles/searchResults.module.css';
 import { Spotify } from '../../util/spotify/index';
 
 /**
@@ -30,13 +29,11 @@ function SearchResultsContainer(props) {
     }, [props.submittedSearchTerm]);
 
     return (
-        <div className={styles.searchResultsContainer}>
-            <SearchResults
-                searchResults={searchResults}
-                listType={listType}
-                onAddSelectedTrack={props.onAddSelectedTrack}
-            />
-        </div>
+        <SearchResults
+            searchResults={searchResults}
+            listType={listType}
+            onAddSelectedTrack={props.onAddSelectedTrack}
+        />
     );
 };
 

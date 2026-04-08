@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Playlist from './Playlist';
-import styles from '../styles/playlist.module.css';
 import { Spotify } from '../../util/spotify/index';
 
 function PlaylistContainer(props) {
@@ -34,7 +33,7 @@ function PlaylistContainer(props) {
     */
     const handleSubmitPlaylist = async () => {
         const trackUris = playlistTracks.map((track) => track.uri);
-        
+
         if (!playlistName || trackUris.length === 0) {
             alert('Please enter a playlist name and add at least one track before submitting.');
             return;
@@ -56,16 +55,15 @@ function PlaylistContainer(props) {
     };
 
     return (
-        <div className={styles.playlistContainer}>
-            <Playlist
-                playlistName={playlistName}
-                playlistTracks={playlistTracks}
-                listType={listType}
-                onUpdatePlaylistName={handleUpdatePlaylistName}
-                onRemovePlaylistTrack={handleRemoveTrack}
-                onSubmitPlaylist={handleSubmitPlaylist}
-            />
-        </div>
+        <Playlist
+            playlistName={playlistName}
+            playlistTracks={playlistTracks}
+            listType={listType}
+            onUpdatePlaylistName={handleUpdatePlaylistName}
+            onRemovePlaylistTrack={handleRemoveTrack}
+            onSubmitPlaylist={handleSubmitPlaylist}
+        />
+
     );
 }
 

@@ -1,4 +1,4 @@
-import Login from './components/Login';
+import Login from './Login';
 import { AUTH_LOGIN } from '../../util/config/spotifyConfig';
 
 const LoginContainer = () => {

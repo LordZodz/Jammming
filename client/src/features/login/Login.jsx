@@ -1,4 +1,4 @@
-import styles from '../styles/login.module.css';
+import styles from './login.module.css';
 
 const Login = (props) => {
 

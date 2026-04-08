@@ -1,8 +1,3 @@
-/* 
- * This CSS module contains styles for the SearchResults component.
- * It is used to style the search results section of the application.
- */
-
 .searchResultsContainer {
     display: flex;
     flex-direction: column;

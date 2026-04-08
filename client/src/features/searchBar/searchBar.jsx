@@ -1,4 +1,4 @@
-import styles from '../styles/searchBar.module.css';
+import styles from './searchBar.module.css';
 
 /**
  * This presentation component is responsible for rendering the search bar in the application. 

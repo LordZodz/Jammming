@@ -1,6 +1,6 @@
-import styles from '../styles/track.module.css';
-import addIcon from '../../../assets/images/plus.svg';
-import removeIcon from '../../../assets/images/minus.svg';
+import styles from './track.module.css';
+import addIcon from '../../assets/images/plus.svg';
+import removeIcon from '../../assets/images/minus.svg';
 
 /** 
  * This presentation component is responsible for rendering a single track in the application. 
