@@ -1,4 +1,3 @@
-import { SPOTIFY_API_BASE_URL } from "./config";
 import { getAccessToken } from "./auth";
 import { parseJsonResponse } from "./parse";
 
@@ -9,7 +8,7 @@ import { parseJsonResponse } from "./parse";
  * @returns An object containing the track's id, name, artist, album, image URL, and URI. 
  * If any of these properties are missing in the input track object, they will default to an empty string.
  */
-function mapTrack(track) {
+const mapTrack = (track) => {
     return {
         id: track?.id || '',
         name: track?.name || '',
@@ -27,7 +26,7 @@ function mapTrack(track) {
  * @param {*} options The options to pass to the fetch function.
  * @returns An object containing the result of the fetch operation, including the status, data, and any error message.
  */
-async function fetchWithAccessToken(url, options = {}) {
+const fetchWithAccessToken = async (url, options = {}) => {
     const token = await getAccessToken();
 
     if (!token) {
@@ -58,7 +57,7 @@ async function fetchWithAccessToken(url, options = {}) {
  * @returns An object containing the search results, including a success status, an array of tracks, and any error message if the search fails. 
  * Each track in the results is mapped to a simplified track object using the mapTrack function.
  */
-async function search(query) {
+const search = async (query) => {
     const trimmedQuery = query?.trim();
 
     if (!trimmedQuery) {
@@ -114,7 +113,7 @@ async function search(query) {
  * @returns An object containing the result of the save operation, including a success status, the ID of the created playlist, 
  * the snapshot ID of the playlist after adding tracks, and any error message if the operation fails.
  */
-async function savePlaylist(name, trackUris) {
+const savePlaylist = async (name, trackUris) => {
     const trimmedName = name?.trim();
     const validTracksUris = Array.isArray(trackUris) ? trackUris.filter(Boolean) : [];
 

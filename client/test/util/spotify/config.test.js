@@ -1,11 +1,9 @@
-import { describe, test, expect, vi, afterEach } from 'vitest';
-import { STORAGE_KEYS } from '../../../src/util/spotify/config';
+import { describe, test, expect } from 'vitest';
+import { STORAGE_KEYS } from '../../../src/util/config/spotifyConfig';
 
 describe('Spotify config constants', () => {
-    test('SPOTIFY_ACCOUNTS_BASE_URL is correct', () => {
+    test('STORAGE_KEYS contains access token and expiry keys', () => {
         expect(STORAGE_KEYS).toEqual({
-            codeVerifier: "spotify_code_verifier",
-            authState: "spotify_auth_state",
             accessToken: "spotify_access_token",
             expiresAt: "spotify_token_expires_at",
         });

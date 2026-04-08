@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Tracklist from '../components/Tracklist';
+import Tracklist from './Tracklist';
 
 /** 
  * This container component is responsible for managing the state and logic related to the tracklist in the application.

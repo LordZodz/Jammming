@@ -1,4 +1,4 @@
-import { STORAGE_KEYS } from './config.js';
+import { STORAGE_KEYS } from '../config/spotifyConfig.js';
 
 let accessToken = '';
 let expiresAt = 0;
@@ -54,18 +54,8 @@ function clearStoredToken() {
     sessionStorage.removeItem(STORAGE_KEYS.expiresAt);
 };
 
-/**
- * Clears the PKCE code verifier and state from localStorage, 
- * which are used during the authentication process.
- */
-function clearAuthStorage() {
-    localStorage.removeItem(STORAGE_KEYS.codeVerifier);
-    localStorage.removeItem(STORAGE_KEYS.authState);
-};
-
 export {
     getStoredToken,
     setStoredToken,
     clearStoredToken,
-    clearAuthStorage,
 };

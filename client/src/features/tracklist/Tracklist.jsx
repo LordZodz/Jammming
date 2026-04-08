@@ -1,4 +1,4 @@
-import TrackContainer from '../../track/containers/TrackContainer';
+import TrackContainer from '../track/TrackContainer';
 
 /** 
  * This presentation component is responsible for rendering a list of tracks in the application. 

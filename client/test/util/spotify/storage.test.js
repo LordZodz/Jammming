@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
-import { getStoredToken, setStoredToken, clearStoredToken, clearAuthStorage } from '../../../src/util/spotify/storage';
-import { STORAGE_KEYS } from '../../../src/util/spotify/config';
+import { getStoredToken, setStoredToken, clearStoredToken } from '../../../src/util/spotify/storage';
+import { STORAGE_KEYS } from '../../../src/util/config/spotifyConfig';
 import { createStorageMock } from './mockHelpers/mockHelpers';
 
 describe('storage utilities', () => {
@@ -66,13 +66,4 @@ describe('storage utilities', () => {
 		expect(sessionStorage.getItem(STORAGE_KEYS.expiresAt)).toBeNull();
 	});
 
-	test('clearAuthStorage removes code verifier and auth state from localStorage', () => {
-		localStorage.setItem(STORAGE_KEYS.codeVerifier, 'verifier-value');
-		localStorage.setItem(STORAGE_KEYS.authState, 'state-value');
-
-		clearAuthStorage();
-
-		expect(localStorage.getItem(STORAGE_KEYS.codeVerifier)).toBeNull();
-		expect(localStorage.getItem(STORAGE_KEYS.authState)).toBeNull();
-	});
 });

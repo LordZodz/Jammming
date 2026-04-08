@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import Playlist from '../components/Playlist';
+import Playlist from './Playlist';
 import styles from '../styles/playlist.module.css';
-import { Spotify } from '../../../util/spotify/index';
+import { Spotify } from '../../util/spotify/index';
 
 function PlaylistContainer(props) {
     const [playlistName, setPlaylistName] = useState('');
@@ -19,11 +19,11 @@ function PlaylistContainer(props) {
         }
     }, [props.selectedTrack]);
 
-    function handleUpdatePlaylistName(name) {
+    const handleUpdatePlaylistName = (name) => {
         setPlaylistName(name);
     };
 
-    function handleRemoveTrack(trackToRemove) {
+    const handleRemoveTrack = (trackToRemove) => {
         setPlaylistTracks((prev) => prev.filter((item) => item.id !== trackToRemove.id));
     };
 
@@ -32,7 +32,7 @@ function PlaylistContainer(props) {
      * and then resetting the playlist name and tracks back to their default states. 
      * 
     */
-    async function handleSubmitPlaylist() {
+    const handleSubmitPlaylist = async () => {
         const trackUris = playlistTracks.map((track) => track.uri);
         
         if (!playlistName || trackUris.length === 0) {
@@ -50,7 +50,7 @@ function PlaylistContainer(props) {
         };
     };
 
-    function handleClearPlaylist() {
+    const handleClearPlaylist = () => {
         setPlaylistName('');
         setPlaylistTracks([]);
     };

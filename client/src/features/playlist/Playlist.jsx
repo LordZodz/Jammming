@@ -1,5 +1,5 @@
 import styles from '../styles/playlist.module.css';
-import TracklistContainer from '../../tracklist/containers/TracklistContainer';
+import TracklistContainer from '../tracklist/TracklistContainer';
 
 function Playlist(props) {
 

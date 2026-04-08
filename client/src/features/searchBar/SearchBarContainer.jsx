@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import SearchBar from '../components/SearchBar';
+import SearchBar from './searchBar';
 
 /** 
  * This container component is responsible for managing the state and logic of the SearchBar component.
@@ -11,7 +11,7 @@ import SearchBar from '../components/SearchBar';
 function SearchBarContainer(props) {
     const [searchTerm, setSearchTerm] = useState('');
 
-    function handleSubmit(e) {
+    const handleSubmit = (e) => {
         e.preventDefault();
         props.onSearch(searchTerm.trim());
     };

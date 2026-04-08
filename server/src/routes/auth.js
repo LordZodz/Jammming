@@ -5,17 +5,21 @@ import {
     SPOTIFY_ACCOUNTS_BASE_URL,
     TOKEN_ENDPOINT,
     AUTH_ENDPOINT,
-} from '../util/config.js';
+    AUTH_CALLBACK,
+} from '../config/config.js';
 
 const router = express.Router();
 
 const STATE_COOKIE = 'spotify_auth_state';
 
 let access_token = '';
+let expires_in = 3600;
 
 router.get('/login', (req, res) => {
+    console.log('Initiating Spotify login flow');
     const state = generateRandomString(16);
-    const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+    const redirectUri = process.env.SERVER_BASE_URL + AUTH_CALLBACK;
+    const spotifyAuthUrl = `${SPOTIFY_ACCOUNTS_BASE_URL}${AUTH_ENDPOINT}`;
 
     res.cookie(STATE_COOKIE, state, { httpOnly: true, sameSite: 'lax' });
 
@@ -27,10 +31,18 @@ router.get('/login', (req, res) => {
         state,
     });
 
-    res.redirect(`${SPOTIFY_ACCOUNTS_BASE_URL}${AUTH_ENDPOINT}?${params.toString()}`);
+    try {
+        //console.log('Redirecting to Spotify authorization endpoint with params:', params );
+        const fullAuthUrl = `${spotifyAuthUrl}?${params.toString()}`;
+        res.redirect(fullAuthUrl);
+    } catch (err) {
+        console.error('Error during redirect to Spotify:', err);
+        res.status(500).json({ error: 'Failed to initiate Spotify login' });
+    };
 });
 
 router.get('/callback', async (req, res) => {
+    //console.log('Received callback from Spotify with query params:', req.query);
     const { code, state, error } = req.query;
     const storedState = req.cookies[STATE_COOKIE];
     const clientBaseUrl = process.env.CLIENT_BASE_URL || 'http://localhost:5173';
@@ -38,10 +50,12 @@ router.get('/callback', async (req, res) => {
     res.clearCookie(STATE_COOKIE);
 
     if (error) {
+        console.log('Spotify returned an error during authorization:', error);
         return res.redirect(`${clientBaseUrl}?error=${encodeURIComponent(error)}`);
     }
 
     if (!state || !storedState || state !== storedState) {
+        console.warn('State mismatch in Spotify callback. Potential CSRF attack.');
         return res.redirect(`${clientBaseUrl}?error=state_mismatch`);
     }
 
@@ -52,10 +66,11 @@ router.get('/callback', async (req, res) => {
     const body = new URLSearchParams({
         grant_type: 'authorization_code',
         code,
-        redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+        redirect_uri: process.env.SERVER_BASE_URL + AUTH_CALLBACK,
     });
 
     try {
+        console.log('Exchanging authorization code for access token with Spotify');
         const response = await fetch(`${SPOTIFY_ACCOUNTS_BASE_URL}${TOKEN_ENDPOINT}`, {
             method: 'POST',
             headers: {
@@ -72,7 +87,10 @@ router.get('/callback', async (req, res) => {
             return res.redirect(`${clientBaseUrl}?error=token_exchange_failed`);
         }
 
+        console.log('Token exchange successful. Received access token from Spotify.');
+
         access_token = data.access_token;
+        expires_in = data.expires_in || 3600;
 
         res.redirect(clientBaseUrl);
     } catch (err) {
@@ -82,7 +100,7 @@ router.get('/callback', async (req, res) => {
 });
 
 router.get('/token', (req, res) => {
-    res.json({ access_token });
+    res.json({ access_token, expires_in });
 });
 
 export default router;

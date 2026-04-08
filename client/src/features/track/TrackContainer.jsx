@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Track from '../components/Track';
+import Track from './Track';
 
 /** 
  * This container component is responsible for managing the state and logic related to a single track in the application. 

@@ -4,14 +4,20 @@ import cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
 import authRouter from './routes/auth.js';
 
-config();
+// load environment variables from .env file
+const configResult = config();
+if (configResult.error) {
+    console.error('Error loading .env file:', configResult.error);
+    process.exit(1);
+};
 
-const port = process.env.PORT || 3001;
+const base_url = process.env.SERVER_BASE_URL;
+const port = process.env.SERVER_PORT;
 
 const app = express();
 
 app.use(cors({
-    origin: process.env.CLIENT_BASE_URL || 'http://localhost:5173',
+    origin: process.env.CLIENT_BASE_URL,
     credentials: true,
 }));
 app.use(cookieParser());
@@ -24,5 +30,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => {
-    console.log(`Listening at http://127.0.0.1:${port}`);
+    console.log(`Listening at ${base_url}`);
 });

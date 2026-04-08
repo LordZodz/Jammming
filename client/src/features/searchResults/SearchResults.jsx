@@ -1,5 +1,5 @@
 import styles from '../styles/searchResults.module.css';
-import TracklistContainer from '../../tracklist/containers/TracklistContainer';
+import TracklistContainer from '../tracklist/TracklistContainer';
 
 /**
  * This presentation component is responsible for rendering the search results in the application. 

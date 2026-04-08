@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import SearchResults from '../components/SearchResults';
+import SearchResults from './SearchResults';
 import styles from '../styles/searchResults.module.css';
-import { Spotify } from '../../../util/spotify/index';
+import { Spotify } from '../../util/spotify/index';
 
 /**
  * This container component is responsible for managing the state and logic related to the search results in the application. 
@@ -15,7 +15,7 @@ function SearchResultsContainer(props) {
     const listType = 'searchResults';
 
     useEffect(() => {
-        async function fetchResults() {
+        const fetchResults = async () => {
             if (!props.submittedSearchTerm) {
                 setSearchResults([]);
                 return;

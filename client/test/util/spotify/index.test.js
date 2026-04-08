@@ -8,11 +8,10 @@ vi.mock('../../../src/util/spotify/api', () => ({
 vi.mock('../../../src/util/spotify/auth', () => ({
     getAccessToken: vi.fn(),
     clearStoredToken: vi.fn(),
-    clearAuthStorage: vi.fn(),
 }));
 
 import { Spotify } from '../../../src/util/spotify';
-import { getAccessToken, clearAuthStorage, clearStoredToken } from '../../../src/util/spotify/auth';
+import { getAccessToken, clearStoredToken } from '../../../src/util/spotify/auth';
 import { search, savePlaylist } from '../../../src/util/spotify/api';
 
 describe('Spotify index', () => {
@@ -20,11 +19,10 @@ describe('Spotify index', () => {
         vi.clearAllMocks();
     });
 
-    test('clearSession clears token and auth storage', () => {
+    test('clearSession clears the stored token', () => {
         Spotify.clearSession();
 
         expect(clearStoredToken).toHaveBeenCalledTimes(1);
-        expect(clearAuthStorage).toHaveBeenCalledTimes(1);
     });
 
     test('Spotify facade exposes auth and api functions', () => {
@@ -33,18 +31,4 @@ describe('Spotify index', () => {
         expect(Spotify.savePlaylist).toBe(savePlaylist);
     });
 
-    test('clearSession calls cleanup methods in order', () => {
-        const order = [];
-
-        vi.mocked(clearStoredToken).mockImplementation(() => {
-            order.push('clearStoredToken');
-        });
-        vi.mocked(clearAuthStorage).mockImplementation(() => {
-            order.push('clearAuthStorage');
-        });
-
-        Spotify.clearSession();
-
-        expect(order).toEqual(['clearStoredToken', 'clearAuthStorage']);
-    });
 });
