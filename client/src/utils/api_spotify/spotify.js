@@ -1,14 +1,13 @@
-import { search, savePlaylist } from './api';
+import { search, savePlaylist, playTrack, setRepeat } from './api';
 
 const AUTH_LOGIN = "/auth/login";
 const AUTH_TOKEN = "/auth/token";
 
-/**
- * The Spotify object serves as a centralized interface for interacting with the Spotify API.
- */
 const Spotify = {
     search,
-    savePlaylist
+    savePlaylist,
+    playTrack,
+    setRepeat,
 };
 
 export { 

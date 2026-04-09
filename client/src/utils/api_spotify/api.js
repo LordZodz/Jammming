@@ -2,6 +2,7 @@ const SERVER_URL = import.meta.env.VITE_SERVER_BASE_URL;
 const API_SEARCH = "/api/search";
 const API_ME_PLAYLISTS = "/api/me/playlists";
 const API_PLAYLISTS = "/api/playlists";
+const API_PLAYER = "/api/player";
 
 /**
  * Parses a JSON response from a fetch request, handling errors gracefully.
@@ -63,11 +64,10 @@ const search = async (query) => {
     const SEARCH_QUERY_ENDPOINT = `${SERVER_URL}${API_SEARCH}/searchQuery`;
 
     // Make a request to the server's search endpoint, including credentials for authentication.
-    const result = await parseJsonResponse(
-        await fetch(`${SEARCH_QUERY_ENDPOINT}?${params.toString()}`, {
-            credentials: 'include',
-        })
-    );
+    const searchResponse = await fetch(`${SEARCH_QUERY_ENDPOINT}?${params.toString()}`, {
+        credentials: 'include',
+    });
+    const result = await parseJsonResponse(searchResponse);
 
     // If the search request fails or returns an error, return an object with the error message and an empty tracks array.
     if (!result.ok) {
@@ -128,16 +128,13 @@ const savePlaylist = async (name, trackUris) => {
     // Construct the URL for creating a new playlist and make a POST request to the server. 
     // The server will handle the interaction with the Spotify API, including authentication and error handling.
     const CREATE_PLAYLIST_ENDPOINT = `${SERVER_URL}${API_ME_PLAYLISTS}/createPlaylist`;
-    const createNewPlaylistResult = await parseJsonResponse(
-        await fetch(CREATE_PLAYLIST_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: trimmedName, public: false }),
-            credentials: 'include',
-        })
-    );
+    const createPlaylistResponse = await fetch(CREATE_PLAYLIST_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: trimmedName, public: false }),
+        credentials: 'include',
+    });
+    const createNewPlaylistResult = await parseJsonResponse(createPlaylistResponse);
 
     // If the playlist creation request fails or returns an error, return an object with the error message.
     if (!createNewPlaylistResult.ok || !createNewPlaylistResult.data?.id) {
@@ -154,16 +151,13 @@ const savePlaylist = async (name, trackUris) => {
     // then construct the URL for adding tracks to the playlist and make a POST request to the server.
     const playlistId = createNewPlaylistResult.data.id;
     const ADD_TRACKS_TO_PLAYLIST_ENDPOINT = `${SERVER_URL}${API_PLAYLISTS}/${playlistId}/addTracksToPlaylist`;
-    const addTracksToNewPlaylistResult = await parseJsonResponse(
-        await fetch(ADD_TRACKS_TO_PLAYLIST_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ uris: validTracksUris }),
-            credentials: 'include',
-        })
-    );
+    const addTracksResponse = await fetch(ADD_TRACKS_TO_PLAYLIST_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uris: validTracksUris }),
+        credentials: 'include',
+    });
+    const addTracksToNewPlaylistResult = await parseJsonResponse(addTracksResponse);
 
     // If the request to add tracks to the new playlist fails or returns an error, return an object with the error message.
     if (!addTracksToNewPlaylistResult.ok) {
@@ -184,7 +178,59 @@ const savePlaylist = async (name, trackUris) => {
     };
 };
 
+const playTrack = async (deviceId, uri) => {
+    const response = await fetch(`${SERVER_URL}${API_PLAYER}/play`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deviceId, uri }),
+        credentials: 'include',
+    });
+
+    // Spotify returns 204 No Content on success — no body to parse
+    if (response.status === 204) {
+        return { ok: true };
+    }
+
+    const result = await parseJsonResponse(response);
+
+    if (!result.ok) {
+        return {
+            ok: false,
+            error: result.data?.error?.message || 'Failed to start playback.',
+        };
+    }
+
+    return { ok: true };
+};
+
+const setRepeat = async (state) => {
+    const response = await fetch(`${SERVER_URL}${API_PLAYER}/repeat`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ state }),
+        credentials: 'include',
+    });
+
+    // Spotify returns 204 No Content on success
+    if (response.status === 204) {
+        return { ok: true };
+    }
+
+    const result = await parseJsonResponse(response);
+
+    if (!result.ok) {
+        return {
+            ok: false,
+            error: result.data?.error?.message || 'Failed to set repeat mode.',
+        };
+    }
+
+    return { ok: true };
+};
+
 export {
     search,
     savePlaylist,
+    playTrack,
+    setRepeat,
 };

@@ -6,6 +6,7 @@ import authRouter from './routes/auth.js';
 import searchRouter from './routes/search.js';
 import mePlaylistsRouter from './routes/mePlaylists.js';
 import playlistRouter from './routes/playlist.js';
+import playerRouter from './routes/player.js';
 
 // load environment variables from .env file. 
 // If there's an error, log it and exit the process.
@@ -43,6 +44,7 @@ app.use('/auth', authRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/me/playlists', mePlaylistsRouter);
 app.use('/api/playlists', playlistRouter);
+app.use('/api/player', playerRouter);
 
 // Global error handling middleware to catch any unhandled errors in the request processing pipeline.
 // If an error occurs, it logs the error and sends a 500 Internal Server Error response with a generic error message.

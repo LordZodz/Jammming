@@ -38,6 +38,40 @@
     margin: 0;
 }
 
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.playButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.playIcon {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.playButton:hover {
+    transform: scale(1.06);
+}
+
+.playButton:focus-visible {
+    outline: 4px solid;
+    outline-offset: 2px;
+}
+
 .addButton {
     display: inline-flex;
     align-items: center;

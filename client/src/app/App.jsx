@@ -3,9 +3,10 @@ import Header from '../features/header/Header';
 import SearchBarContainer from '../features/searchBar/SearchBarContainer';
 import SearchResultsContainer from '../features/searchResults/SearchResultsContainer';
 import PlaylistContainer from '../features/playlist/PlaylistContainer';
+import WebPlayerContainer from '../features/webPlayer/WebPlayerContainer';
 import styles from './app.module.css';
 import Login from '../features/login/Login';
-import { AUTH_TOKEN } from '../utils/api_spotify/spotify';
+import { AUTH_TOKEN, Spotify } from '../utils/api_spotify/spotify';
 
 /**
  * This is the main App component of the React application.
@@ -18,6 +19,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
+  const [deviceId, setDeviceId] = useState(null);
 
   useEffect(() => {
     const getToken = async () => {
@@ -56,6 +58,21 @@ function App() {
     setSubmittedSearchTerm(term);
   };
 
+  const handleDeviceReady = (id) => {
+    setDeviceId(id);
+  };
+
+  const handlePlayTrack = async (uri) => {
+    if (!deviceId) {
+      console.warn('No playback device available. Transfer playback to Jammming Web Player first.');
+      return;
+    }
+    const result = await Spotify.playTrack(deviceId, uri);
+    if (!result.ok) {
+      console.error('Failed to play track:', result.error);
+    }
+  };
+
   return (
     <div className={styles.app}>
       <Header />
@@ -63,10 +80,14 @@ function App() {
         ? <Login />
         : <>
           <SearchBarContainer onSearch={handleSearch} />
-          <div className={styles.resultsContent}>
+          <div className={styles.playerContainer}>
+            <WebPlayerContainer onDeviceReady={handleDeviceReady} />
+          </div>
+          <div className={styles.resultsContainer}>
             <SearchResultsContainer
               submittedSearchTerm={submittedSearchTerm}
               onAddSelectedTrack={handleAddSelectedTrack}
+              onPlayTrack={handlePlayTrack}
             />
             <PlaylistContainer
               selectedTrack={selectedTrack}

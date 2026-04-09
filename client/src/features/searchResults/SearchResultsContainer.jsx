@@ -31,6 +31,7 @@ function SearchResultsContainer(props) {
         <SearchResults
             searchResults={searchResults}
             onAddSelectedTrack={props.onAddSelectedTrack}
+            onPlayTrack={props.onPlayTrack}
         />
     );
 };

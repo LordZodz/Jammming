@@ -19,6 +19,7 @@ function Tracklist(props) {
                         listType={props.listType}
                         onAddSelectedTrack={props.onAddSelectedTrack}
                         onRemovePlaylistTrack={props.onRemovePlaylistTrack}
+                        onPlayTrack={props.onPlayTrack}
                     />
                 ))
             )}

@@ -91,9 +91,13 @@ router.get('/callback', async (req, res) => {
 });
 
 router.get('/token', (req, res) => {
-    console.log('Received request for access token');
+    console.log(`Timestamp: ${new Date().toISOString()} - Received request for access token`);
     const token = getAccessToken();
-    if (!token) return res.status(401).json({ error: 'No valid access token' });
+    if (!token) {
+        console.log(`Timestamp: ${new Date().toISOString()} - No valid access token available`);
+        return res.status(401).json({ error: 'No valid access token' });
+    }
+    console.log(`Timestamp: ${new Date().toISOString()} - Returning access token`);
     res.json({ access_token: token });
 });
 

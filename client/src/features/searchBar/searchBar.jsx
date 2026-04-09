@@ -11,7 +11,9 @@ function SearchBar(props) {
 
     return (
         <div className={styles.searchBar}>
-            <form 
+            <form
+                id="searchBarForm"
+                name='searchBarForm'
                 className={styles.searchForm}
                 onSubmit={props.handleSubmit}
                 >

@@ -1,6 +1,7 @@
 import styles from './track.module.css';
 import addIcon from '../../assets/images/plus.svg';
 import removeIcon from '../../assets/images/minus.svg';
+import playIcon from '../../assets/images/play.svg';
 
 /** 
  * This presentation component is responsible for rendering a single track in the application. 
@@ -23,7 +24,22 @@ function Track(props) {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className={styles.actions}>
+                {props.listType === 'searchResults' && (
+                    <button
+                        className={styles.playButton}
+                        type="button"
+                        aria-label={`Play ${props.track.name}`}
+                        onClick={() => props.onPlayTrack(props.track.uri)}
+                    >
+                        <img
+                            src={playIcon}
+                            alt=""
+                            aria-hidden="true"
+                            className={styles.playIcon}
+                        />
+                    </button>
+                )}
                 {props.listType === 'searchResults' && (
                     <button
                         className={styles.addButton}

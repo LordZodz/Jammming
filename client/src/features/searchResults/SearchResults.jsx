@@ -22,6 +22,7 @@ function SearchResults(props) {
                             tracks={props.searchResults}
                             listType='searchResults'
                             onAddSelectedTrack={props.onAddSelectedTrack}
+                            onPlayTrack={props.onPlayTrack}
                         />
                     )}
                 </div>
