@@ -1,15 +1,18 @@
 import express from 'express';
+import { createRequestLogger } from '../util/formatHelpers.js';
 import { getAccessToken } from '../storage/storage.js';
 import { SPOTIFY_API_BASE_URL, SEARCH_ENDPOINT } from '../config/config.js';
 
 const router = express.Router();
 
 router.get('/searchQuery', async (req, res) => {
-    console.log('Received search request with query:', req.query);
+    const logger = createRequestLogger();
+    logger.log(`Received search request with the following query: ${req.query.q}`);
+
     const token = getAccessToken();
 
     if (!token) {
-        console.warn('No access token available for search request');
+        logger.warn('No access token available for search request');
         return res.status(401).json({ error: 'Unauthorized: No access token available' });
     };
 
@@ -26,7 +29,7 @@ router.get('/searchQuery', async (req, res) => {
 
     try {
         const searchUrl = `${SPOTIFY_API_BASE_URL}${SEARCH_ENDPOINT}?${params.toString()}`;
-        console.log('Fetching search results from Spotify');
+        logger.log('Fetching search results from Spotify');
 
         const response = await fetch(searchUrl, {
             method: 'GET',
@@ -37,10 +40,10 @@ router.get('/searchQuery', async (req, res) => {
 
         const data = await response.json();
 
-        console.log('Search results received from Spotify with status:', response.status);
+        logger.log(`Search results received from Spotify with status: ${response.status}`);
         res.json(data);
     } catch (error) {
-        console.error('Error fetching search results:', error);
+        logger.error('Error fetching search results:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });

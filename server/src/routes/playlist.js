@@ -1,15 +1,18 @@
 import express from 'express';
+import { createRequestLogger } from '../util/formatHelpers.js';
 import { getAccessToken } from '../storage/storage.js';
 import { SPOTIFY_API_BASE_URL, PLAYLISTS_ENDPOINT } from '../config/config.js';
 
 const router = express.Router();
 
 router.post('/:playlistId/addTracksToPlaylist', async (req, res) => {
-    console.log('Received request to add tracks to playlist with id:', req.params.playlistId);
+    const logger = createRequestLogger();
+    logger.log(`Received request to add tracks to playlist with id: ${req.params.playlistId}`);
+
     const token = getAccessToken();
 
     if (!token) {
-        console.warn('No access token available for add tracks to playlist request');
+        logger.warn('No access token available for add tracks to playlist request');
         return res.status(401).json({ error: 'Unauthorized: No access token available' });
     };
 
@@ -38,16 +41,16 @@ router.post('/:playlistId/addTracksToPlaylist', async (req, res) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error('Error adding tracks to playlist:', errorData);
+            logger.error('Error adding tracks to playlist:', errorData);
             return res.status(response.status).json({ error: errorData.error?.message || 'Failed to add tracks to playlist on Spotify.' });
         };
 
-        console.log('Tracks added successfully to playlist on Spotify');
+        logger.log('Tracks added successfully to playlist on Spotify');
 
         const data = await response.json();
         res.status(response.status).json(data);
     } catch (error) {
-        console.error('Error adding tracks to playlist:', error);
+        logger.error('Error adding tracks to playlist:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     };
 });

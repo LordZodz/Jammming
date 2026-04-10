@@ -1,4 +1,5 @@
 import express from 'express';
+import { createRequestLogger } from '../util/formatHelpers.js';
 import { generateRandomString } from '../util/authHelpers.js';
 import { SCOPES, SPOTIFY_ACCOUNTS_BASE_URL, TOKEN_ENDPOINT, AUTH_ENDPOINT, AUTH_CALLBACK_ENDPOINT } from '../config/config.js';
 import { getAccessToken, setTokenData } from '../storage/storage.js';
@@ -8,7 +9,9 @@ const router = express.Router();
 const STATE_COOKIE = 'spotify_auth_state';
 
 router.get('/login', (req, res) => {
-    console.log('Initiating Spotify login flow');
+    const logger = createRequestLogger();
+    logger.log('Initiating Spotify login flow');
+
     const state = generateRandomString(16);
     const redirectUri = process.env.SERVER_BASE_URL + AUTH_CALLBACK_ENDPOINT;
     const spotifyAuthUrl = `${SPOTIFY_ACCOUNTS_BASE_URL}${AUTH_ENDPOINT}`;
@@ -24,17 +27,16 @@ router.get('/login', (req, res) => {
     });
 
     try {
-        //console.log('Redirecting to Spotify authorization endpoint with params:', params );
         const fullAuthUrl = `${spotifyAuthUrl}?${params.toString()}`;
         res.redirect(fullAuthUrl);
     } catch (err) {
-        console.error('Error during redirect to Spotify:', err);
+        logger.error('Error during redirect to Spotify:', err);
         res.status(500).json({ error: 'Failed to initiate Spotify login' });
     };
 });
 
 router.get('/callback', async (req, res) => {
-    //console.log('Received callback from Spotify with query params:', req.query);
+    const logger = createRequestLogger();
     const { code, state, error } = req.query;
     const storedState = req.cookies[STATE_COOKIE];
     const clientBaseUrl = process.env.CLIENT_BASE_URL || 'http://localhost:5173';
@@ -42,12 +44,12 @@ router.get('/callback', async (req, res) => {
     res.clearCookie(STATE_COOKIE);
 
     if (error) {
-        console.log('Spotify returned an error during authorization:', error);
+        logger.log('Spotify returned an error during authorization:', error);
         return res.redirect(`${clientBaseUrl}?error=${encodeURIComponent(error)}`);
     }
 
     if (!state || !storedState || state !== storedState) {
-        console.warn('State mismatch in Spotify callback. Potential CSRF attack.');
+        logger.warn('State mismatch in Spotify callback. Potential CSRF attack.');
         return res.redirect(`${clientBaseUrl}?error=state_mismatch`);
     }
 
@@ -62,7 +64,7 @@ router.get('/callback', async (req, res) => {
     });
 
     try {
-        console.log('Exchanging authorization code for access token with Spotify');
+        logger.log('Exchanging authorization code for access token with Spotify');
         const response = await fetch(`${SPOTIFY_ACCOUNTS_BASE_URL}${TOKEN_ENDPOINT}`, {
             method: 'POST',
             headers: {
@@ -75,29 +77,30 @@ router.get('/callback', async (req, res) => {
         const data = await response.json();
 
         if (!response.ok || !data.access_token) {
-            console.error('Token exchange failed:', data);
+            logger.error('Token exchange failed:', data);
             return res.redirect(`${clientBaseUrl}?error=token_exchange_failed`);
         }
 
-        console.log('Token exchange successful. Received access token from Spotify.');
+        logger.log('Token exchange successful. Received access token from Spotify.');
 
         setTokenData(data.access_token, data.expires_in || 3600);
 
         res.redirect(clientBaseUrl);
     } catch (err) {
-        console.error('Unexpected error during token exchange:', err);
+        logger.error('Unexpected error during token exchange:', err);
         res.redirect(`${clientBaseUrl}?error=server_error`);
     }
 });
 
 router.get('/token', (req, res) => {
-    console.log(`Timestamp: ${new Date().toISOString()} - Received request for access token`);
+    const logger = createRequestLogger();
+    logger.log('Received request for access token');
     const token = getAccessToken();
     if (!token) {
-        console.log(`Timestamp: ${new Date().toISOString()} - No valid access token available`);
+        logger.log('No valid access token available');
         return res.status(401).json({ error: 'No valid access token' });
     }
-    console.log(`Timestamp: ${new Date().toISOString()} - Returning access token`);
+    logger.log('Returning access token');
     res.json({ access_token: token });
 });
 

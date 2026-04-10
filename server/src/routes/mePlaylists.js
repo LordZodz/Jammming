@@ -1,15 +1,18 @@
 import express from 'express';
+import { createRequestLogger } from '../util/formatHelpers.js';
 import { getAccessToken } from '../storage/storage.js';
 import { SPOTIFY_API_BASE_URL, ME_PLAYLISTS_ENDPOINT } from '../config/config.js';
 
 const router = express.Router();
 
 router.post('/createPlaylist', async (req, res) => {
-    console.log('Received request to create a new playlist with name:', req.body.name);
+    const logger = createRequestLogger();
+    logger.log(`Received request to create a new playlist with name: ${req.body.name}`);
+
     const token = getAccessToken();
 
     if (!token) {
-        console.warn('No access token available for create playlist request');
+        logger.warn('No access token available for create playlist request');
         return res.status(401).json({ error: 'Unauthorized: No access token available' });
     };
 
@@ -37,15 +40,15 @@ router.post('/createPlaylist', async (req, res) => {
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error('Error creating playlist:', errorData);
+            logger.error('Error creating playlist:', errorData);
             return res.status(response.status).json({ error: errorData.error?.message || 'Failed to create playlist on Spotify.' });
         };
 
-        console.log('Playlist created successfully on Spotify');
+        logger.log('Playlist created successfully on Spotify');
         const data = await response.json();
         res.status(response.status).json(data);
     } catch (error) {
-        console.error('Error creating playlist:', error);
+        logger.error('Error creating playlist:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     };
 });

@@ -16,88 +16,92 @@ import { AUTH_TOKEN, Spotify } from '../utils/api_spotify/spotify';
  */
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [selectedTrack, setSelectedTrack] = useState(null);
-  const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
-  const [deviceId, setDeviceId] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [selectedTrack, setSelectedTrack] = useState(null);
+    const [submittedSearchTerm, setSubmittedSearchTerm] = useState('');
+    const [deviceId, setDeviceId] = useState(null);
 
-  useEffect(() => {
-    const getToken = async () => {
-      try {
-        const backendTokenUrl = `${import.meta.env.VITE_SERVER_BASE_URL}${AUTH_TOKEN}`;
+    useEffect(() => {
+        const getToken = async () => {
+            try {
+                const backendTokenUrl = `${import.meta.env.VITE_SERVER_BASE_URL}${AUTH_TOKEN}`;
 
-        const response = await fetch(backendTokenUrl, { credentials: 'include' });
-        if (!response.ok) {
-          console.error('No valid session on server:', response.statusText);
-          return;
-        }
+                const response = await fetch(backendTokenUrl, { credentials: 'include' });
+                if (!response.ok) {
+                    console.error('No valid session on server:', response.statusText);
+                    return;
+                }
 
-        setIsAuthenticated(true);
-      } catch (error) {
-        // If the server is down or there is a network error, log the error and allow the app to render the login screen
-        if (error instanceof TypeError) {
-          console.error('Network error while fetching access token. Server may be down:', error);
-        } else {
-          console.error('Error fetching access token:', error);
+                setIsAuthenticated(true);
+            } catch (error) {
+                // If the server is down or there is a network error, log the error and allow the app to render the login screen
+                if (error instanceof TypeError) {
+                    console.error('Network error while fetching access token. Server may be down:', error);
+                } else {
+                    console.error('Error fetching access token:', error);
+                };
+            }
         };
-      }
+
+        getToken();
+    }, []);
+
+    const handleAddSelectedTrack = (track) => {
+        setSelectedTrack(track);
     };
 
-    getToken();
-  }, []);
+    const handleClearSelectedTrack = () => {
+        setSelectedTrack(null);
+    };
 
-  const handleAddSelectedTrack = (track) => {
-    setSelectedTrack(track);
-  };
+    const handleSearch = (term) => {
+        setSubmittedSearchTerm(term);
+    };
 
-  const handleClearSelectedTrack = () => {
-    setSelectedTrack(null);
-  };
+    const handleDeviceReady = (id) => {
+        setDeviceId(id);
+    };
 
-  const handleSearch = (term) => {
-    setSubmittedSearchTerm(term);
-  };
+    const handlePlayTrack = async (uri) => {
+        if (!deviceId) {
+            console.warn('No playback device available. Transfer playback to Jammming Web Player first.');
+            return;
+        }
+        const result = await Spotify.playTrack(deviceId, uri);
+        if (!result.ok) {
+            console.error('Failed to play track:', result.error);
+        }
+    };
 
-  const handleDeviceReady = (id) => {
-    setDeviceId(id);
-  };
-
-  const handlePlayTrack = async (uri) => {
-    if (!deviceId) {
-      console.warn('No playback device available. Transfer playback to Jammming Web Player first.');
-      return;
-    }
-    const result = await Spotify.playTrack(deviceId, uri);
-    if (!result.ok) {
-      console.error('Failed to play track:', result.error);
-    }
-  };
-
-  return (
-    <div className={styles.app}>
-      <Header />
-      {!isAuthenticated
-        ? <Login />
-        : <>
-          <SearchBarContainer onSearch={handleSearch} />
-          <div className={styles.playerContainer}>
-            <WebPlayerContainer onDeviceReady={handleDeviceReady} />
-          </div>
-          <div className={styles.resultsContainer}>
-            <SearchResultsContainer
-              submittedSearchTerm={submittedSearchTerm}
-              onAddSelectedTrack={handleAddSelectedTrack}
-              onPlayTrack={handlePlayTrack}
-            />
-            <PlaylistContainer
-              selectedTrack={selectedTrack}
-              onClearSelectedTrack={handleClearSelectedTrack}
-            />
-          </div>
-        </>
-      }
-    </div>
-  )
+    return (
+        <div className={styles.appContainer}>
+            {!isAuthenticated
+                ? <Login />
+                : <>
+                    <div className={styles.headerContainer}>
+                        <Header />
+                    </div>
+                    <div className={styles.mainContainer}>
+                        <SearchBarContainer onSearch={handleSearch} />
+                        <div className={styles.resultsContainer}>
+                            <SearchResultsContainer
+                                submittedSearchTerm={submittedSearchTerm}
+                                onAddSelectedTrack={handleAddSelectedTrack}
+                                onPlayTrack={handlePlayTrack}
+                            />
+                            <PlaylistContainer
+                                selectedTrack={selectedTrack}
+                                onClearSelectedTrack={handleClearSelectedTrack}
+                            />
+                        </div>
+                        <div className={styles.webPlayerContainer}>
+                            <WebPlayerContainer onDeviceReady={handleDeviceReady} />
+                        </div>
+                    </div>
+                </>
+            }
+        </div>
+    )
 }
 
 export default App;
