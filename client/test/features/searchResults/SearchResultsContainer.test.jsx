@@ -1,24 +1,24 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import SearchResultsContainer from '../../../src/features/searchResults/container/SearchResultsContainer';
+import SearchResultsContainer from '../../../src/features/searchResults/SearchResultsContainer';
 
 const { spotifySearchMock } = vi.hoisted(() => ({
 	spotifySearchMock: vi.fn(),
 }));
 
-vi.mock('../../../src/util/spotify/index', () => ({
+vi.mock('../../../src/utils/api_spotify/spotify', () => ({
 	Spotify: {
 		search: spotifySearchMock,
 	},
 }));
 
-vi.mock('../../../src/features/searchResults/components/SearchResults', () => ({
-	default: ({ searchResults, listType, onAddSelectedTrack }) => (
+vi.mock('../../../src/features/searchResults/SearchResults', () => ({
+	default: ({ searchResults, onAddSelectedTrack, onPlayTrack }) => (
 		<div
 			data-testid="search-results"
 			data-track-count={searchResults.length}
-			data-list-type={listType}
 			data-on-add-type={typeof onAddSelectedTrack}
+			data-on-play-type={typeof onPlayTrack}
 		/>
 	),
 }));
@@ -45,6 +45,7 @@ describe('SearchResultsContainer', () => {
 
 	test('calls Spotify.search with submittedSearchTerm and passes returned tracks to SearchResults', async () => {
 		const onAddSelectedTrack = vi.fn();
+		const onPlayTrack = vi.fn();
 		spotifySearchMock.mockResolvedValue({
 			tracks: [
 				{ id: '1', name: 'Hysteria' },
@@ -56,6 +57,7 @@ describe('SearchResultsContainer', () => {
 			<SearchResultsContainer
 				submittedSearchTerm="Muse"
 				onAddSelectedTrack={onAddSelectedTrack}
+				onPlayTrack={onPlayTrack}
 			/>
 		);
 
@@ -66,8 +68,8 @@ describe('SearchResultsContainer', () => {
 		await waitFor(() => {
 			const searchResults = screen.getByTestId('search-results');
 			expect(searchResults).toHaveAttribute('data-track-count', '2');
-			expect(searchResults).toHaveAttribute('data-list-type', 'searchResults');
 			expect(searchResults).toHaveAttribute('data-on-add-type', 'function');
+			expect(searchResults).toHaveAttribute('data-on-play-type', 'function');
 		});
 	});
 

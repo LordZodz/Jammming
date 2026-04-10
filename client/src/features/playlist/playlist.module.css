@@ -41,61 +41,11 @@
     gap: 10px;
 }
 
-.playlistItemContainer {
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
-    justify-content: space-between;
-    align-items: center;
-}
-
-.playlistItem {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 5px;
-}
-
-.playlistItem p {
-    margin: 0;
-    color: #fff;
-}
-
 .noTracks {
     color: var(--font-color-default);
     font-style: italic;
     text-align: center;
     margin-top: 20px;
-}
-
-.removeButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 50%;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
-}
-
-.removeIcon {
-    width: 20px;
-    height: 20px;
-    display: block;
-}
-
-.removeButton:hover {
-    transform: scale(1.06);
-}
-
-.removeButton:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
 }
 
 .saveButton {

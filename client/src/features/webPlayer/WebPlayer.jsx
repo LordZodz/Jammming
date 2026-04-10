@@ -1,64 +1,54 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
+import { useMarquee } from '../../utils/animations/textAnimations';
+import { formatTime } from '../../utils/helpers/timeFormats';
 import styles from './WebPlayer.module.css';
+import playIcon from '../../assets/images/play.svg';
+import pauseIcon from '../../assets/images/pause.svg';
+import playNextIcon from '../../assets/images/play_next.svg';
+import playPreviousIcon from '../../assets/images/play_prev.svg';
+import repeatIcon from '../../assets/images/repeat.svg';
+import repeatTrackIcon from '../../assets/images/repeat_track.svg';
+import muteIcon from '../../assets/images/volume_mute.svg';
+import volumeLowIcon from '../../assets/images/volume_low.svg';
+import volumeMediumIcon from '../../assets/images/volume_medium.svg';
+import volumeHighIcon from '../../assets/images/volume_high.svg';
 
-function useMarquee(dep, active) {
-    const ref = useRef(null);
-    const [shouldScroll, setShouldScroll] = useState(false);
+const VOLUME_ICONS = {
+    muted:  { src: muteIcon,          alt: 'Muted' },
+    low:    { src: volumeLowIcon,     alt: 'Low volume' },
+    medium: { src: volumeMediumIcon,  alt: 'Medium volume' },
+    high:   { src: volumeHighIcon,    alt: 'High volume' },
+};
 
-    useEffect(() => {
-        if (!active || !ref.current) {
-            setShouldScroll(false);
-            return;
-        }
-
-        const el = ref.current;
-
-        const measure = () => {
-            const overflow = el.scrollWidth - el.parentElement.clientWidth;
-            if (overflow > 0) {
-                const newOffset = `-${overflow}px`;
-                const prevOffset = el.style.getPropertyValue('--marquee-offset');
-                el.style.setProperty('--marquee-offset', newOffset);
-                if (prevOffset && prevOffset !== newOffset) {
-                    // Restart the animation so it immediately uses the new offset
-                    // rather than waiting for the current iteration to finish
-                    el.style.animation = 'none';
-                    void el.offsetHeight; // force reflow to flush the change
-                    el.style.animation = '';
-                }
-                setShouldScroll(true);
-            } else {
-                el.style.removeProperty('--marquee-offset');
-                setShouldScroll(false);
-            }
-        };
-
-        measure();
-
-        const observer = new ResizeObserver(measure);
-        observer.observe(el.parentElement);
-
-        return () => observer.disconnect();
-    }, [dep, active]);
-
-    return [ref, shouldScroll];
-}
+const buildSliderGradient = (valuePct, hover) => {
+    if (!hover.visible) {
+        return `linear-gradient(to right, #1db954 ${valuePct}%, rgba(255,255,255,0.4) ${valuePct}%)`;
+    }
+    const hoverPct = hover.pct * 100;
+    if (hoverPct > valuePct) {
+        return `linear-gradient(to right, #1db954 ${valuePct}%, white ${valuePct}%, white ${hoverPct}%, rgba(255,255,255,0.4) ${hoverPct}%)`;
+    }
+    return `linear-gradient(to right, #1db954 ${valuePct}%, rgba(255,255,255,0.4) ${valuePct}%)`;
+};
 
 function WebPlayer(props) {
-    const { player, is_paused, is_active, current_track, volume, onVolumeChange, repeatMode, onRepeatChange, position, duration, onSeek } = props;
+    const { player, is_paused, is_active, current_track,
+        volume, volumeMode, onVolumeChange, onMuteToggle,
+        repeatMode, onRepeatChange, position, duration, onSeek
+    } = props;
 
     const [seekValue, setSeekValue] = useState(null);
+    const [hoverSeek, setHoverSeek] = useState({ visible: false, x: 0, pct: 0, time: 0 });
+    const [hoverVolume, setHoverVolume] = useState({ visible: false, pct: 0 });
     const [trackNameRef, scrollTrackName] = useMarquee(current_track?.name, is_active);
     const [artistNameRef, scrollArtistName] = useMarquee(current_track?.artists?.[0]?.name, is_active);
 
-    const formatTime = (ms) => {
-        const totalSeconds = Math.floor(ms / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    };
-
     const displayPosition = seekValue !== null ? seekValue : position;
+
+    const playedPct = duration > 0 ? (displayPosition / duration) * 100 : 0;
+    const isDragging = seekValue !== null;
+    const seekTrackBackground = buildSliderGradient(playedPct, isDragging ? { visible: false } : hoverSeek);
+    const volumeTrackBackground = buildSliderGradient(volume * 100, hoverVolume);
 
     if (!is_active) {
         return (
@@ -97,53 +87,99 @@ function WebPlayer(props) {
                 <div className={styles.webPlayerMain}>
                     <div className={styles.trackControls}>
                         <button
-                            className={styles.controlButton}
+                            className={styles.controlButtons}
                             aria-label="Previous track"
                             onClick={() => player.previousTrack()}
                         >
-                            &laquo;
+                            <img
+                                src={playPreviousIcon}
+                                alt="Previous track"
+                                className={styles.prevTrackIcon}
+                            />
                         </button>
                         <button
-                            className={styles.controlButton}
+                            className={styles.controlButtons}
                             aria-label={is_paused ? 'Play' : 'Pause'}
                             onClick={() => player.togglePlay()}
                         >
-                            {is_paused ? '▶' : '❚❚'}
+                            <img
+                                src={is_paused ? playIcon : pauseIcon}
+                                alt={is_paused ? 'Play' : 'Pause'}
+                                className={styles.playPauseIcon}
+                            />
                         </button>
                         <button
-                            className={styles.controlButton}
+                            className={styles.controlButtons}
                             aria-label="Next track"
                             onClick={() => player.nextTrack()}
                         >
-                            &raquo;
+                            <img
+                                src={playNextIcon}
+                                alt="Next track"
+                                className={styles.nextTrackIcon}
+                            />
                         </button>
                         <button
-                            className={`${styles.controlButton}${repeatMode > 0 ? ` ${styles.controlButtonActive}` : ''}`}
+                            className={`${styles.controlButtons}${repeatMode > 0 ? ` ${styles.controlButtonsActive}` : ''}`}
                             aria-label={['Repeat off', 'Repeat all', 'Repeat track'][repeatMode]}
                             onClick={onRepeatChange}
                         >
-                            {repeatMode === 2 ? '↺¹' : '↺'}
+                            <span
+                                aria-hidden="true"
+                                className={`${styles.repeatIcon}${repeatMode > 0 ? ` ${styles.repeatIconActive}` : ''}`}
+                                style={{
+                                    maskImage: `url(${repeatMode === 2 ? repeatTrackIcon : repeatIcon})`,
+                                    WebkitMaskImage: `url(${repeatMode === 2 ? repeatTrackIcon : repeatIcon})`,
+                                }}
+                            />
                         </button>
                     </div>
                     <div className={styles.seekBar}>
                         <span className={styles.seekTime}>{formatTime(displayPosition)}</span>
-                        <input
-                            className={styles.seekSlider}
-                            type="range"
-                            min="0"
-                            max={duration || 0}
-                            value={displayPosition}
-                            onChange={(e) => setSeekValue(Number(e.target.value))}
-                            onPointerUp={(e) => {
-                                onSeek(Number(e.target.value));
-                                setSeekValue(null);
+                        <div
+                            className={styles.seekSliderWrapper}
+                            onMouseMove={(e) => {
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+                                const pct = x / rect.width;
+                                setHoverSeek({ visible: true, x, pct, time: Math.round(pct * (duration || 0)) });
                             }}
-                            aria-label="Song position"
-                        />
+                            onMouseLeave={() => setHoverSeek({ visible: false, x: 0, pct: 0, time: 0 })}
+                        >
+                            {hoverSeek.visible && (
+                                <div
+                                    className={styles.seekTooltip}
+                                    style={{ left: hoverSeek.x }}
+                                >
+                                    {formatTime(hoverSeek.time)}
+                                </div>
+                            )}
+                            <input
+                                className={styles.seekSlider}
+                                type="range"
+                                min="0"
+                                max={duration || 0}
+                                value={displayPosition}
+                                style={{ background: seekTrackBackground }}
+                                onChange={(e) => setSeekValue(Number(e.target.value))}
+                                onPointerUp={(e) => {
+                                    onSeek(Number(e.target.value));
+                                    setSeekValue(null);
+                                }}
+                                aria-label="Song position"
+                            />
+                        </div>
                         <span className={styles.seekTime}>{formatTime(duration)}</span>
                     </div>
                 </div>
                 <div className={styles.webPlayerMisc}>
+                    <button
+                        className={`${styles.controlButtons}${volume === 0 ? ` ${styles.controlButtonsActive}` : ''}`}
+                        aria-label={volume === 0 ? 'Unmute' : 'Mute'}
+                        onClick={onMuteToggle}
+                    >
+                        <img src={VOLUME_ICONS[volumeMode].src} alt={VOLUME_ICONS[volumeMode].alt} />
+                    </button>
                     <input
                         className={styles.volumeSlider}
                         type="range"
@@ -151,6 +187,13 @@ function WebPlayer(props) {
                         max="1"
                         step="0.01"
                         value={volume}
+                        style={{ background: volumeTrackBackground }}
+                        onMouseMove={(e) => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+                            setHoverVolume({ visible: true, pct: x / rect.width });
+                        }}
+                        onMouseLeave={() => setHoverVolume({ visible: false, pct: 0 })}
                         onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
                         aria-label="Volume"
                     />

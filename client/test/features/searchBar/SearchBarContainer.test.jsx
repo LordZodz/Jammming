@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import SearchBarContainer from '../../../src/features/searchBar/containers/SearchBarContainer';
+import SearchBarContainer from '../../../src/features/searchBar/SearchBarContainer';
 
 describe('SearchBarContainer', () => {
 	let onSearch;

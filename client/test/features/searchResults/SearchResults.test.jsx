@@ -1,14 +1,15 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import SearchResults from '../../../src/features/searchResults/components/SearchResults';
+import SearchResults from '../../../src/features/searchResults/SearchResults';
 
-vi.mock('../../../src/features/tracklist/containers/TracklistContainer', () => ({
-	default: ({ tracklist, listType, onAddSelectedTrack }) => (
+vi.mock('../../../src/features/tracklist/Tracklist', () => ({
+	default: ({ tracks, listType, onAddSelectedTrack, onPlayTrack }) => (
 		<div
 			data-testid="tracklist-container"
-			data-track-count={tracklist.length}
+			data-track-count={tracks.length}
 			data-list-type={listType}
 			data-on-add-type={typeof onAddSelectedTrack}
+			data-on-play-type={typeof onPlayTrack}
 		/>
 	),
 }));
@@ -62,8 +63,34 @@ describe('SearchResults', () => {
 		expect(tracklistContainer).toHaveAttribute('data-track-count', '2');
 		expect(tracklistContainer).toHaveAttribute('data-list-type', 'searchResults');
 		expect(tracklistContainer).toHaveAttribute('data-on-add-type', 'function');
+		expect(tracklistContainer).toHaveAttribute('data-on-play-type', 'undefined');
 		expect(
 			screen.queryByText('No search results found. Please try a different search term.')
 		).not.toBeInTheDocument();
+	});
+
+	test('forwards onPlayTrack to Tracklist when provided', () => {
+		const onPlayTrack = vi.fn();
+		const results = [
+			{
+				id: '1',
+				name: 'Starlight',
+				artist: 'Muse',
+				album: 'Black Holes and Revelations',
+				image: 'starlight.jpg',
+				uri: 'spotify:track:1',
+			},
+		];
+
+		render(
+			<SearchResults
+				searchResults={results}
+				onAddSelectedTrack={() => {}}
+				onPlayTrack={onPlayTrack}
+			/>
+		);
+
+		const tracklistContainer = screen.getByTestId('tracklist-container');
+		expect(tracklistContainer).toHaveAttribute('data-on-play-type', 'function');
 	});
 });

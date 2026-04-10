@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Playlist from '../../../src/features/playlist/components/Playlist';
+import Playlist from '../../../src/features/playlist/Playlist';
 
 describe('Playlist', () => {
     let onUpdatePlaylistName;

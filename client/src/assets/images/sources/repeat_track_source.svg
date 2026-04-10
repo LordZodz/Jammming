@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="repeat_track_source.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   inkscape:export-filename="..\repeat_track.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="5.5660494"
+     inkscape:cx="172.20472"
+     inkscape:cy="161.33525"
+     inkscape:window-width="3584"
+     inkscape:window-height="1892"
+     inkscape:window-x="5364"
+     inkscape:window-y="978"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect27"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0.54632941,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0.60264785,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0.67922115,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect26"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect25"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="bg_shape"
+     style="display:inline">
+    <circle
+       style="display:none;fill:#ffffff;fill-opacity:1;stroke-width:0;stroke-miterlimit:2;paint-order:stroke fill markers"
+       id="path1"
+       cx="45"
+       cy="45"
+       r="45"
+       inkscape:label="circle" />
+  </g>
+  <g
+     inkscape:label="fg_shapes"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline">
+    <rect
+       style="display:none;fill:#000000;fill-opacity:1;stroke-width:0;stroke-miterlimit:2;paint-order:stroke fill markers"
+       id="rect1"
+       width="12"
+       height="45"
+       x="28"
+       y="22.5"
+       inkscape:label="rect_pause_left"
+       rx="2" />
+    <rect
+       style="display:none;fill:#ffffff;fill-opacity:1;stroke-width:0;stroke-miterlimit:2;paint-order:stroke fill markers"
+       id="rect2"
+       width="6"
+       height="45"
+       x="-33.180054"
+       y="22.5"
+       inkscape:label="rect_pause_right"
+       rx="0.99999994"
+       transform="scale(-1,1)" />
+    <path
+       sodipodi:type="star"
+       style="display:none;fill:#ffffff;fill-opacity:1;stroke-width:0;stroke-miterlimit:2;stroke-dasharray:none;paint-order:stroke fill markers"
+       id="path2"
+       inkscape:flatsided="false"
+       sodipodi:sides="3"
+       sodipodi:cx="45.728874"
+       sodipodi:cy="45.063381"
+       sodipodi:r1="25.966063"
+       sodipodi:r2="12.983031"
+       sodipodi:arg1="0"
+       sodipodi:arg2="1.0471976"
+       inkscape:rounded="0"
+       inkscape:randomized="2.7755576e-17"
+       inkscape:transform-center-x="0.27230081"
+       transform="matrix(-0.87293429,0,0,1.0005661,89.765023,-0.08889205)"
+       inkscape:label="triangle_play"
+       inkscape:path-effect="#path-effect27"
+       d="M 71.221802,45.336546 52.220389,56.307016 33.267751,67.249327 a 0.3479389,0.3479389 30 0 1 -0.521908,-0.301324 l 0,-21.884622 0,-21.808048 a 0.39214851,0.39214851 150 0 1 0.588223,-0.339611 L 52.22039,33.819747 71.221802,44.790216 a 0.31542343,0.31542343 90 0 1 0,0.54633 z" />
+    <path
+       d="m 61.221953,25.291397 a 22.112413,22.151779 0 1 1 -27.640524,0"
+       stroke="currentColor"
+       stroke-width="5.53302"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       id="path1-5"
+       style="display:inline;fill:none;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+       inkscape:label="circle_repeat" />
+    <polyline
+       points="14.5,2.5 17,5 14.5,7.5"
+       stroke="currentColor"
+       stroke-width="2"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       fill="none"
+       id="polyline1"
+       transform="matrix(-1.9544798,-1.9579594,1.9544798,-1.9579594,84.217809,68.344075)"
+       inkscape:label="repeat_arrow"
+       style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-opacity:1" />
+    <path
+       id="line3"
+       style="stroke:#ffffff;stroke-width:5.55522;stroke-linecap:round;stroke-opacity:1"
+       d="m 43.77761,53.29895 h 8.444776 M 43.77761,40.965364 47.999997,36.85417 m 0,0 v 16.44478"
+       inkscape:label="repeat_one" />
+  </g>
+</svg>

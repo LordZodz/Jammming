@@ -1,14 +1,14 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import PlaylistContainer from '../../../src/features/playlist/container/PlaylistContainer';
+import PlaylistContainer from '../../../src/features/playlist/PlaylistContainer';
 
-vi.mock('../../../src/util/spotify/index', () => ({
+vi.mock('../../../src/utils/api_spotify/spotify', () => ({
 	Spotify: {
 		savePlaylist: vi.fn(),
 	},
 }));
 
-import { Spotify } from '../../../src/util/spotify/index';
+import { Spotify } from '../../../src/utils/api_spotify/spotify';
 
 describe('PlaylistContainer', () => {
 	let onClearSelectedTrack;

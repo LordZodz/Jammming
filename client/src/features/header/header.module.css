@@ -6,7 +6,7 @@
 
 /* Style for the main title of the application */
 .h1 {
-    font-family: 'Inter', Arial, sans-serif;
+    font-family: var(--font-primary);
     font-size: 4rem;
     margin: 0;
     display: flex;

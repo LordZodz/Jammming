@@ -1,6 +1,6 @@
 import { test, expect, describe, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Tracklist from '../../../src/features/tracklist/components/Tracklist';
+import Tracklist from '../../../src/features/tracklist/Tracklist';
 
 const sampleTracklist = [
     {

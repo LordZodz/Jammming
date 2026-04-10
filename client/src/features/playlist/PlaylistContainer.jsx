@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import Playlist from './Playlist';
 import { Spotify } from '../../utils/api_spotify/spotify';
 
+const LIST_TYPE = 'playlistTracks';
+
 function PlaylistContainer(props) {
     const [playlistName, setPlaylistName] = useState('');
     const [playlistTracks, setPlaylistTracks] = useState([]);
-    const listType = 'playlistTracks';
 
     // When a new track is selected from the search results, add it to the playlist if it's not already there.
     useEffect(() => {
@@ -58,7 +59,7 @@ function PlaylistContainer(props) {
         <Playlist
             playlistName={playlistName}
             playlistTracks={playlistTracks}
-            listType={listType}
+            listType={LIST_TYPE}
             onUpdatePlaylistName={handleUpdatePlaylistName}
             onRemovePlaylistTrack={handleRemoveTrack}
             onSubmitPlaylist={handleSubmitPlaylist}

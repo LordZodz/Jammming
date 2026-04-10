@@ -12,6 +12,8 @@ function WebPlayerContainer(props) {
     const [current_track, setTrack] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
     const [volume, setVolume] = useState(0.5);
+    const [premuteVolume, setPremuteVolume] = useState(null);
+    const [volumeMode, setVolumeMode] = useState('medium'); // 'muted', 'low', 'medium', 'high'
     const [repeatMode, setRepeatMode] = useState(0);
     const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -96,15 +98,48 @@ function WebPlayerContainer(props) {
 
     useEffect(() => {
         if (!is_active || is_paused) return;
-        const interval = setInterval(() => {
-            setPosition(prev => prev + 500);
-        }, 500);
-        return () => clearInterval(interval);
+        let rafId;
+        let lastTimestamp = null;
+        const tick = (timestamp) => {
+            if (lastTimestamp !== null) {
+                const elapsed = timestamp - lastTimestamp;
+                setPosition(prev => prev + elapsed);
+            }
+            lastTimestamp = timestamp;
+            rafId = requestAnimationFrame(tick);
+        };
+        rafId = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(rafId);
     }, [is_active, is_paused]);
 
     const handleVolumeChange = (newVolume) => {
         setVolume(newVolume);
         if (playerRef.current) playerRef.current.setVolume(newVolume);
+        if (newVolume === 0) {
+            setVolumeMode('muted');
+        } else if (newVolume > 0 && newVolume <= 0.33) {
+            setVolumeMode('low');
+        } else if (newVolume > 0.33 && newVolume <= 0.66) {
+            setVolumeMode('medium');
+        } else {
+            setVolumeMode('high');
+        }
+    };
+
+    const handleMuteToggle = () => {
+        if (volume === 0) {
+            handleVolumeChange(premuteVolume ?? 0.5);
+            setPremuteVolume(null);
+        } else {
+            setPremuteVolume(volume);
+            handleVolumeChange(0);
+        }
+    };
+
+    const handleVolumeSlider = (newVolume) => {
+        // If the user adjusts the slider while muted, discard the saved pre-mute volume
+        if (premuteVolume !== null) setPremuteVolume(null);
+        handleVolumeChange(newVolume);
     };
 
     const handleSeek = (positionMs) => {
@@ -132,7 +167,9 @@ function WebPlayerContainer(props) {
             current_track={current_track}
             deviceId={deviceId}
             volume={volume}
-            onVolumeChange={handleVolumeChange}
+            volumeMode={volumeMode}
+            onVolumeChange={handleVolumeSlider}
+            onMuteToggle={handleMuteToggle}
             repeatMode={repeatMode}
             onRepeatChange={handleRepeatChange}
             position={position}

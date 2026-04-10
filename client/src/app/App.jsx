@@ -28,7 +28,7 @@ function App() {
 
                 const response = await fetch(backendTokenUrl, { credentials: 'include' });
                 if (!response.ok) {
-                    console.error('No valid session on server:', response.statusText);
+                    console.error('No valid session on server:', response.ok);
                     return;
                 }
 

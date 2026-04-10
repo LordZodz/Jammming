@@ -1,6 +1,6 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import SearchBar from '../../../src/features/searchBar/components/SearchBar';
+import SearchBar from '../../../src/features/searchBar/searchBar';
 
 describe('SearchBar', () => {
 	let setSearchTerm;

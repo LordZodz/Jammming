@@ -55,16 +55,31 @@
     background: transparent;
     cursor: pointer;
     padding: 0;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
 }
 
-.playIcon {
-    width: 20px;
-    height: 20px;
-    display: block;
+.playTrackIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
 }
 
 .playButton:hover {
-    transform: scale(1.06);
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.playButton:active {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .playButton:focus-visible {
@@ -83,6 +98,8 @@
     background: transparent;
     cursor: pointer;
     padding: 0;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
 }
 
 .addIcon {
@@ -92,7 +109,14 @@
 }
 
 .addButton:hover {
-    transform: scale(1.06);
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.addButton:active {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .addButton:focus-visible {
@@ -116,6 +140,8 @@
     background: transparent;
     cursor: pointer;
     padding: 0;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
 }
 
 .removeIcon {
@@ -125,7 +151,14 @@
 }
 
 .removeButton:hover {
-    transform: scale(1.06);
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.removeButton:active {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .removeButton:focus-visible {

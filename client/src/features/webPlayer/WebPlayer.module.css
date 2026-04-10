@@ -1,12 +1,23 @@
 @keyframes marqueeScroll {
-    0%, 30%     { transform: translateX(0); }
-    60%, 85%    { transform: translateX(var(--marquee-offset, -50px)); }
-    100%        { transform: translateX(0); }
+
+    0%,
+    30% {
+        transform: translateX(0);
+    }
+
+    60%,
+    85% {
+        transform: translateX(var(--marquee-offset, -50px));
+    }
+
+    100% {
+        transform: translateX(0);
+    }
 }
 
 .webPlayerContainer {
     width: 100%;
-    height: 80px;
+    height: 100px;
     background-color: #051208;
     display: flex;
     align-items: center;
@@ -97,34 +108,84 @@
 }
 
 .trackControls {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 24px;
     flex-shrink: 0;
 }
 
-.controlButton {
+.controlButtons {
     background: none;
     border: none;
-    color: white;
-    font-size: 18px;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
-    line-height: 1;
+    margin: 0;
+    padding: 6px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
 }
 
-.controlButton:hover {
-    background-color: rgba(0, 0, 0, 0.15);
+.controlButtons:hover {
+    transform: scale(1.2);
+    /* Applied when releasing a press while hovering — gives the bounce-back */
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
 }
 
-.controlButtonActive {
+.controlButtons:active {
+    transform: scale(0.95);
+    opacity: 0.65;
+    /* Applied on press-down — quick and snappy */
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
+}
+
+.controlButtonsActive {
     color: #1db954;
-    background-color: rgba(0, 0, 0, 0.15);
 }
 
-.controlButtonActive:hover {
-    background-color: rgba(0, 0, 0, 0.25);
+.controlButtonsActive:hover {
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.controlButtonsActive:active {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
+}
+
+.playPauseIcon {
+    width: 34px;
+    height: 34px;
+    display: block;
+}
+
+.prevTrackIcon, .nextTrackIcon, .repeatIcon {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.prevTrackIcon, .nextTrackIcon {
+    flex-shrink: 0;
+}
+
+.repeatIcon {
+    background-color: white;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.repeatIconActive {
+    background-color: var(--brand-color);
 }
 
 .volumeSlider {
@@ -147,6 +208,19 @@
     border-radius: 50%;
     background: white;
     cursor: pointer;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
+}
+
+.volumeSlider:hover::-webkit-slider-thumb {
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.volumeSlider:active::-webkit-slider-thumb {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .volumeSlider::-moz-range-thumb {
@@ -156,6 +230,19 @@
     border-radius: 50%;
     background: white;
     cursor: pointer;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
+}
+
+.volumeSlider:hover::-moz-range-thumb {
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.volumeSlider:active::-moz-range-thumb {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .volumeSlider:focus-visible {
@@ -168,6 +255,28 @@
     align-items: center;
     gap: 8px;
     width: 100%;
+}
+
+.seekSliderWrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.seekTooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+    background: rgba(50, 50, 50, 0.85);
+    color: white;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    padding: 3px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    white-space: nowrap;
+    user-select: none;
 }
 
 .seekTime {
@@ -185,7 +294,7 @@
 .seekSlider {
     -webkit-appearance: none;
     appearance: none;
-    flex: 1;
+    width: 100%;
     height: 4px;
     border-radius: 2px;
     background: rgba(255, 255, 255, 0.4);
@@ -201,6 +310,19 @@
     border-radius: 50%;
     background: white;
     cursor: pointer;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
+}
+
+.seekSlider:hover::-webkit-slider-thumb {
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.seekSlider:active::-webkit-slider-thumb {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .seekSlider::-moz-range-thumb {
@@ -210,6 +332,19 @@
     border-radius: 50%;
     background: white;
     cursor: pointer;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    will-change: transform;
+}
+
+.seekSlider:hover::-moz-range-thumb {
+    transform: scale(1.2);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
+}
+
+.seekSlider:active::-moz-range-thumb {
+    transform: scale(0.95);
+    opacity: 0.65;
+    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .seekSlider:focus-visible {
@@ -219,11 +354,14 @@
 
 .inactiveMessage {
     width: 100%;
-    background-color: #282828;
-    padding: 14px 18px;
-    color: #b3b3b3;
-    font-size: 13px;
-    text-align: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    padding: 0 24px;
+    box-sizing: border-box;
 }
 
 .inactiveMessage b {
