@@ -22,13 +22,13 @@ const VOLUME_ICONS = {
 
 const buildSliderGradient = (valuePct, hover) => {
     if (!hover.visible) {
-        return `linear-gradient(to right, #1db954 ${valuePct}%, rgba(255,255,255,0.4) ${valuePct}%)`;
+        return `linear-gradient(to right, var(--brand-color) ${valuePct}%, rgba(255,255,255,0.4) ${valuePct}%)`;
     }
     const hoverPct = hover.pct * 100;
     if (hoverPct > valuePct) {
-        return `linear-gradient(to right, #1db954 ${valuePct}%, white ${valuePct}%, white ${hoverPct}%, rgba(255,255,255,0.4) ${hoverPct}%)`;
+        return `linear-gradient(to right, var(--brand-color) ${valuePct}%, white ${valuePct}%, white ${hoverPct}%, rgba(255,255,255,0.4) ${hoverPct}%)`;
     }
-    return `linear-gradient(to right, #1db954 ${valuePct}%, rgba(255,255,255,0.4) ${valuePct}%)`;
+    return `linear-gradient(to right, var(--brand-color) ${valuePct}%, rgba(255,255,255,0.4) ${valuePct}%)`;
 };
 
 function WebPlayer(props) {
@@ -161,8 +161,10 @@ function WebPlayer(props) {
                                 max={duration || 0}
                                 value={displayPosition}
                                 style={{ background: seekTrackBackground }}
+                                onPointerDown={(e) => { if (e.button !== 0) e.preventDefault(); }}
                                 onChange={(e) => setSeekValue(Number(e.target.value))}
                                 onPointerUp={(e) => {
+                                    if (e.button !== 0) return;
                                     onSeek(Number(e.target.value));
                                     setSeekValue(null);
                                 }}
