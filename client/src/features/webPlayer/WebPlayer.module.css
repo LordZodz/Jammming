@@ -142,7 +142,7 @@
 }
 
 .controlButtonsActive {
-    color: #1db954;
+    color: var(--brand-color);
 }
 
 .controlButtonsActive:hover {

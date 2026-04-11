@@ -82,7 +82,9 @@ function App() {
                         <Header />
                     </div>
                     <div className={styles.mainContainer}>
-                        <SearchBarContainer onSearch={handleSearch} />
+                        <div className={styles.searchBarContainer}>
+                            <SearchBarContainer onSearch={handleSearch} />
+                        </div>
                         <div className={styles.resultsContainer}>
                             <SearchResultsContainer
                                 submittedSearchTerm={submittedSearchTerm}

@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import styles from './searchBar.module.css';
 
 /**
@@ -8,6 +9,16 @@ import styles from './searchBar.module.css';
  */
 
 function SearchBar(props) {
+    const groupRef = useRef(null);
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && props.searchTerm.trim()) {
+            groupRef.current?.classList.add(styles.searchInputGroupPressed);
+            setTimeout(() => {
+                groupRef.current?.classList.remove(styles.searchInputGroupPressed);
+            }, 150);
+        }
+    };
 
     return (
         <div className={styles.searchBar}>
@@ -17,20 +28,24 @@ function SearchBar(props) {
                 className={styles.searchForm}
                 onSubmit={props.handleSubmit}
                 >
-                <input
-                    className={styles.searchInput}
-                    placeholder="Enter A Song, Album, or Artist"
-                    value={props.searchTerm}
-                    onChange={(e) => props.setSearchTerm(e.target.value)}
-                />
-                <button
-                    className={styles.searchButton}
-                    type="submit"
-                    aria-label="Search"
-                    disabled={!props.searchTerm.trim()}
-                >
-                    SEARCH
-                </button>
+                <div ref={groupRef} className={styles.searchInputGroup}>
+                    <input
+                        ref={props.inputRef}
+                        className={styles.searchInput}
+                        placeholder="Enter A Song, Album, or Artist"
+                        value={props.searchTerm}
+                        onChange={(e) => props.setSearchTerm(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <button
+                        className={styles.searchButton}
+                        type="submit"
+                        aria-label="Search"
+                        disabled={!props.searchTerm.trim()}
+                    >
+                        Search
+                    </button>
+                </div>
             </form>
         </div>
     );

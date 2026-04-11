@@ -1,6 +1,9 @@
 .searchBar {
     display: flex;
     justify-content: center;
+    min-width: 450px;
+    width: 50%;
+    height: 64px;
     margin: 20px 0;
 }
 
@@ -8,44 +11,87 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 600px;
-    justify-content: center;
     align-items: center;
-    gap: 40px;
+}
+
+.searchInputGroup {
+    display: flex;
+    width: 100%;
+    border-radius: 64px;
+    background-color: #292929;
+    overflow: hidden;
+    box-sizing: border-box;
+    will-change: transform;
+    transition: background-color 0.3s ease-in-out, filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.searchInputGroup:hover {
+    background-color: #343434;
+}
+
+.searchInputGroup:focus-within {
+    background-color: #343434;
+    transform: scale(1.02);
+}
+
+/* pressed — after :focus-within so it wins the specificity tie for .searchInputGroupPressed */
+.searchInputGroup:has(.searchButton:active:not(:disabled)),
+.searchInputGroupPressed {
+    filter: brightness(0.75);
+    transform: scale(0.97);
+    transition: background-color 0.3s ease-in-out, transform 0.1s ease-in;
 }
 
 .searchInput {
-    width: 80%;
+    flex: 1;
     padding: 24px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    border: none;
-    border-radius: 8px;
+    border: 2px solid transparent;
+    border-right: none;
+    border-radius: 64px 0 0 64px;
+    box-sizing: border-box;
+    background: transparent;
+    color: var(--font-color-default);
     text-align: center;
+    outline: none;
+    min-width: 0;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.searchInput::placeholder {
+    color: var(--font-color-placeholder);
+}
+
+.searchInputGroup:hover .searchInput {
+    border-color: #4a4a4a;
+}
+
+.searchInputGroup:focus-within .searchInput {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.searchInputGroup:focus-within .searchInput:not(:placeholder-shown) {
+    border-color: var(--brand-color);
 }
 
 .searchButton {
-    width: 50%;
-    padding: 24px;
+    padding: 0 24px;
     font-size: 20px;
-    font-weight: 900;
+    font-weight: 700;
     border: none;
-    border-radius: 16px;
     background-color: var(--brand-color);
     color: #09200e;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    white-space: nowrap;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .searchButton:hover {
     background-color: var(--brand-color-hover);
-    transform: scale(1.02);
 }
 
 .searchButton:disabled {
     background-color: rgba(255, 255, 255, 0.5);
     cursor: not-allowed;
-    transform: none;
 }

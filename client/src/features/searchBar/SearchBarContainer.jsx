@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import SearchBar from './searchBar';
 
 /** 
@@ -10,10 +10,14 @@ import SearchBar from './searchBar';
 
 function SearchBarContainer(props) {
     const [searchTerm, setSearchTerm] = useState('');
+    const inputRef = useRef(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         props.onSearch(searchTerm.trim());
+        if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+        }
     };
 
     return (
@@ -21,6 +25,7 @@ function SearchBarContainer(props) {
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             handleSubmit={handleSubmit}
+            inputRef={inputRef}
         />
     );
 };

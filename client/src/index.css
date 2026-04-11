@@ -1,6 +1,7 @@
 :root {
     --font-primary: 'Inter', Arial, sans-serif;
     --font-color-default: #dcdcdc;
+    --font-color-placeholder: #a0a0a0;
     --brand-color: #1ed760;
     --brand-color-hover: #44ea7e;
 }
