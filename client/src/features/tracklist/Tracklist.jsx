@@ -1,3 +1,4 @@
+import styles from './tracklist.module.css';
 import Track from '../track/Track';
 
 /** 
@@ -10,7 +11,7 @@ import Track from '../track/Track';
 
 function Tracklist(props) {
     return (
-        <>
+        <div className={props.listType === 'playlistTracks' ? styles.playlistTracklist : styles.searchResulttracklist}>
             {props.tracks.length > 0 && (
                 props.tracks.map((track) => (
                     <Track
@@ -23,7 +24,7 @@ function Tracklist(props) {
                     />
                 ))
             )}
-        </>
+        </div>
     );
 };
 

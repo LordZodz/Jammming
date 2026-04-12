@@ -1,8 +1,7 @@
 .searchBar {
     display: flex;
     justify-content: center;
-    min-width: 450px;
-    width: 50%;
+    width: 500px;
     height: 64px;
     margin: 20px 0;
 }
@@ -94,4 +93,5 @@
 .searchButton:disabled {
     background-color: rgba(255, 255, 255, 0.5);
     cursor: not-allowed;
+    transform: none;
 }

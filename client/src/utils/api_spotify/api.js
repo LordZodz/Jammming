@@ -1,3 +1,5 @@
+import { formatTime } from "../helpers/timeFormats";
+
 const SERVER_URL = import.meta.env.VITE_SERVER_BASE_URL;
 const API_SEARCH = "/api/search";
 const API_ME_PLAYLISTS = "/api/me/playlists";
@@ -32,10 +34,12 @@ const parseJsonResponse = async (response) => {
 const mapTrack = (track) => {
     return {
         id: track?.id || '',
+        explicit: track?.explicit || false,
         name: track?.name || '',
         artist: track?.artists?.[0]?.name || '',
         album: track?.album?.name || '',
         image: track?.album?.images?.[0]?.url || '',
+        duration: track?.duration_ms ? formatTime(track.duration_ms) : '',
         uri: track?.uri || '',
     };
 };

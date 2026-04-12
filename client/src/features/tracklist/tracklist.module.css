@@ -1,0 +1,11 @@
+.searchResulttracklist {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 6px 8px;
+}
+
+.playlistTracklist {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 6px 8px;
+}

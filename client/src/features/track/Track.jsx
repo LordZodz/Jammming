@@ -10,28 +10,37 @@ import playTrackIcon from '../../assets/images/play_track.svg';
  * @returns {JSX.Element} The rendered Track component.
  */
 
-function Track(props) {
+function Track({ track, listType, onPlayTrack, onAddSelectedTrack, onRemovePlaylistTrack }) {
     return (
-        <div id={props.track.id} className={styles.trackBox}>
+        <div id={track.id} className={styles.trackBox}>
             <div className={styles.trackDetails}>
                 <div className={styles.albumCoverContainer}>
-                    <img src={props.track.image} alt={`${props.track.name} album cover`} className={styles.albumCover} />
+                    <img src={track.image} alt={`${track.name} album cover`} className={styles.albumCover} />
                 </div>
                 <div className={styles.textInfo}>
-                    <p>{props.track.name}</p>
-                    <div className={styles.artistAlbum}>
-                        <p>{props.track.artist} • {props.track.album}</p>
+                    <div className={styles.trackName}>
+                        {track.explicit && <span className={styles.explicitBadge} aria-label="Explicit">E</span>}
+                        <p>{track.name}</p>
+                    </div>
+                    <div className={styles.trackArtist}>
+                        <p>{track.artist}</p>
+                    </div>
+                    <div className={styles.trackAlbum}>
+                        <p>{track.album}</p>
                     </div>
                 </div>
             </div>
-            <div className={styles.actions}>
-                {props.listType === 'searchResults' && (
-                    <>
+            <div className={styles.trackDuration}>
+                <p>{track.duration}</p>
+            </div>
+            {listType === 'searchResults' && (
+                <div className={styles.searchResultActions}>
+                    <div className={styles.buttonGroup}>
                         <button
                             className={styles.playButton}
                             type="button"
-                            aria-label={`Play ${props.track.name}`}
-                            onClick={() => props.onPlayTrack(props.track.uri)}
+                            aria-label={`Play ${track.name}`}
+                            onClick={() => onPlayTrack(track.uri)}
                         >
                             <img
                                 src={playTrackIcon}
@@ -43,8 +52,8 @@ function Track(props) {
                         <button
                             className={styles.addButton}
                             type="button"
-                            aria-label={`Add ${props.track.name} to playlist`}
-                            onClick={() => props.onAddSelectedTrack(props.track)}
+                            aria-label={`Add ${track.name} to playlist`}
+                            onClick={() => onAddSelectedTrack(track)}
                         >
                             <img
                                 src={addIcon}
@@ -53,14 +62,16 @@ function Track(props) {
                                 className={styles.addIcon}
                             />
                         </button>
-                    </>
-                )}
-                {props.listType === 'playlistTracks' && (
+                    </div>
+                </div>
+            )}
+            {listType === 'playlistTracks' && (
+                <div className={styles.playlistTrackActions}>
                     <button
                         className={styles.removeButton}
                         type="button"
-                        aria-label={`Remove ${props.track.name} from playlist`}
-                        onClick={() => props.onRemovePlaylistTrack(props.track)}
+                        aria-label={`Remove ${track.name} from playlist`}
+                        onClick={() => onRemovePlaylistTrack(track)}
                     >
                         <img
                             src={removeIcon}
@@ -69,8 +80,8 @@ function Track(props) {
                             className={styles.removeIcon}
                         />
                     </button>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     )
 };

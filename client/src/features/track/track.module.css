@@ -1,11 +1,16 @@
 .trackBox {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
     padding: 10px;
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.1);
-    justify-content: space-between;
     align-items: center;
+    column-gap: 8px;
+}
+
+.trackBox img {
+    -webkit-user-drag: none;
 }
 
 .trackDetails {
@@ -13,11 +18,15 @@
     flex-direction: row;
     gap: 15px;
     align-items: center;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .albumCoverContainer {
     width: 60px;
     height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
     flex-shrink: 0;
 }
 
@@ -25,20 +34,78 @@
     width: 60px;
     height: 60px;
     object-fit: cover;
-    border-radius: 4px;
 }
 
 .textInfo {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .textInfo p {
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.actions {
+.explicitBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: var(--font-color-placeholder);
+    color: black;
+    font-family: var(--font-primary);
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 2px;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.trackName {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    overflow: hidden;
+    gap: 6px;
+}
+
+.trackArtist, .trackAlbum {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.trackDuration {
+    font-size: 12px;
+    opacity: 0.85;
+    white-space: nowrap;
+    width: 48px;
+    text-align: right;
+    color: var(--font-color-placeholder);
+}
+
+.searchResultActions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 80px;
+}
+
+.playlistTrackActions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 40px;
+}
+
+.buttonGroup {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -60,15 +127,9 @@
 }
 
 .playTrackIcon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     width: 50%;
     height: 50%;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
+    display: block;
 }
 
 .playButton:hover {
@@ -124,11 +185,6 @@
     outline-offset: 2px;
 }
 
-.addIcon:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
 .removeButton {
     display: inline-flex;
     align-items: center;
@@ -162,6 +218,6 @@
 }
 
 .removeButton:focus-visible {
-    outline: 2px solid #fff;
+    outline: 4px solid;
     outline-offset: 2px;
 }
