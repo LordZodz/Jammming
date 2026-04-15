@@ -30,7 +30,7 @@
     content: '';
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 180, 100, 0.35);
+    background-color: rgba(var(--brand-color-rgb), 0.25);
     z-index: -1;
 }
 
@@ -56,7 +56,6 @@
 
 .resultsContainer {
     margin: 0 auto;
-    padding: 0 20px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     max-width: 1280px;
