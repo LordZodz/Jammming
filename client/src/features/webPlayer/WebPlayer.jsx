@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { useMarquee } from '../../utils/animations/textAnimations';
 import { formatTime } from '../../utils/helpers/timeFormats';
 import styles from './WebPlayer.module.css';
-import playIcon from '../../assets/images/play.svg';
-import pauseIcon from '../../assets/images/pause.svg';
-import playNextIcon from '../../assets/images/play_next.svg';
-import playPreviousIcon from '../../assets/images/play_prev.svg';
-import repeatIcon from '../../assets/images/repeat.svg';
-import repeatTrackIcon from '../../assets/images/repeat_track.svg';
-import muteIcon from '../../assets/images/volume_mute.svg';
-import volumeLowIcon from '../../assets/images/volume_low.svg';
-import volumeMediumIcon from '../../assets/images/volume_medium.svg';
-import volumeHighIcon from '../../assets/images/volume_high.svg';
+import playIcon from '../../assets/images/UI/play.svg';
+import pauseIcon from '../../assets/images/UI/pause.svg';
+import playNextIcon from '../../assets/images/UI/play_next.svg';
+import playPreviousIcon from '../../assets/images/UI/play_prev.svg';
+import repeatIcon from '../../assets/images/UI/repeat.svg';
+import repeatTrackIcon from '../../assets/images/UI/repeat_track.svg';
+import muteIcon from '../../assets/images/UI/volume_mute.svg';
+import volumeLowIcon from '../../assets/images/UI/volume_low.svg';
+import volumeMediumIcon from '../../assets/images/UI/volume_medium.svg';
+import volumeHighIcon from '../../assets/images/UI/volume_high.svg';
 
 const VOLUME_ICONS = {
     muted:  { src: muteIcon,          alt: 'Muted' },

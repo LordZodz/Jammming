@@ -6,6 +6,32 @@
 .appContainer {
     margin: 0 auto;
     min-width: 900px;
+    min-height: 100vh;
+    position: relative;
+    isolation: isolate;
+}
+
+/* Background image layer: blurred and dimmed independently of content */
+.appContainer::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url('../assets/images/BGs/bg_jammming_concert_nainoa_shizuru.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    filter: blur(4px);
+    z-index: -2;
+}
+
+/* Green tint layer, unaffected by image opacity or blur */
+.appContainer::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 180, 100, 0.35);
+    z-index: -1;
 }
 
 .headerContainer {
@@ -30,6 +56,7 @@
 
 .resultsContainer {
     margin: 0 auto;
+    padding: 0 20px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     max-width: 1280px;
