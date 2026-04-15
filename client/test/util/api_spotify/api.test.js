@@ -56,12 +56,14 @@ describe('spotify api utilities', () => {
 				items: [
 					{
 						id: '1',
+						explicit: false,
 						name: 'Track Name',
 						artists: [{ name: 'Artist Name' }],
 						album: {
 							name: 'Album Name',
 							images: [{ url: 'https://image.test/cover.jpg' }],
 						},
+						duration: '',
 						uri: 'spotify:track:1',
 					},
 				],
@@ -76,10 +78,12 @@ describe('spotify api utilities', () => {
 			tracks: [
 				{
 					id: '1',
+					explicit: false,
 					name: 'Track Name',
 					artist: 'Artist Name',
 					album: 'Album Name',
 					image: 'https://image.test/cover.jpg',
+					duration: '',
 					uri: 'spotify:track:1',
 				},
 			],

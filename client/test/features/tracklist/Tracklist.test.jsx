@@ -1,25 +1,7 @@
 import { test, expect, describe, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Tracklist from '../../../src/features/tracklist/Tracklist';
-
-const sampleTracklist = [
-    {
-        id: '1',
-        name: 'Track One',
-        artist: 'Artist One',
-        album: 'Album One',
-        image: 'test_image_1.jpg',
-        uri: 'spotify:track:1'
-    },
-    {
-        id: '2',
-        name: 'Track Two',
-        artist: 'Artist Two',
-        album: 'Album Two',
-        image: 'test_image_2.jpg',
-        uri: 'spotify:track:2'
-    }
-];
+import { sampleTracklist } from '../../setup/fixtures';
 
 describe('Tracklist', () => {
     let onAddSelectedTrack;
@@ -32,11 +14,11 @@ describe('Tracklist', () => {
 
     test('renders all tracks from the provided tracks array', () => {
         render(
-            <Tracklist 
-                tracks={sampleTracklist} 
+            <Tracklist
+                tracks={sampleTracklist}
                 listType="searchResults"
                 onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack} 
+                onRemovePlaylistTrack={onRemovePlaylistTrack}
             />
         );
 
@@ -44,21 +26,23 @@ describe('Tracklist', () => {
         expect(screen.getByText('Track Two')).toBeInTheDocument();
     });
 
-    test('displays each track name, artist, album, and album cover image correctly', () => {
+    test('displays track metadata and only shows explicit badges for explicit tracks', () => {
         render(
-            <Tracklist 
-                tracks={sampleTracklist} 
+            <Tracklist
+                tracks={sampleTracklist}
                 listType="searchResults"
                 onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack} 
+                onRemovePlaylistTrack={onRemovePlaylistTrack}
             />
         );
 
+        expect(screen.getAllByLabelText('Explicit')).toHaveLength(1);
+
         sampleTracklist.forEach((track) => {
             expect(screen.getByText(track.name)).toBeInTheDocument();
-            expect(
-                screen.getByText(`${track.artist} • ${track.album}`)
-            ).toBeInTheDocument();
+            expect(screen.getByText(track.artist)).toBeInTheDocument();
+            expect(screen.getByText(track.album)).toBeInTheDocument();
+            expect(screen.getByText(track.duration)).toBeInTheDocument();
             expect(
                 screen.getByAltText(`${track.name} album cover`)
             ).toHaveAttribute('src', track.image);
@@ -72,7 +56,7 @@ describe('Tracklist', () => {
                 listType="searchResults"
                 onAddSelectedTrack={onAddSelectedTrack}
                 onRemovePlaylistTrack={onRemovePlaylistTrack}
-             />
+            />
         );
         expect(screen.queryByText('Track One')).not.toBeInTheDocument();
         expect(screen.queryByRole('img', { name: /album cover/i })).not.toBeInTheDocument();

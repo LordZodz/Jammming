@@ -55,6 +55,10 @@ describe('PlaylistContainer', () => {
 			/>
 		);
 
+		// Ensure the playlist has a name and that a track is added so the save button is enabled for this test
+		fireEvent.change(screen.getByPlaceholderText('Type playlist name'), {
+			target: { value: 'My Playlist' },
+		});
 		expect(await screen.findByText('Test Track')).toBeInTheDocument();
 		expect(onClearSelectedTrack).toHaveBeenCalledTimes(1);
 		expect(screen.getByRole('button', { name: /save playlist/i })).not.toBeDisabled();
@@ -100,7 +104,7 @@ describe('PlaylistContainer', () => {
 		});
 	});
 
-	test('alerts and skips save when playlist name is missing', async () => {
+	test('keeps save button disabled when playlist name is missing', async () => {
 		render(
 			<PlaylistContainer
 				selectedTrack={sampleTrack}
@@ -109,11 +113,10 @@ describe('PlaylistContainer', () => {
 		);
 
 		const saveButton = await screen.findByRole('button', { name: /save playlist/i });
-		fireEvent.click(saveButton);
 
-		expect(alert).toHaveBeenCalledWith(
-			'Please enter a playlist name and add at least one track before submitting.'
-		);
+		expect(saveButton).toBeDisabled();
+		fireEvent.click(saveButton);
+		expect(alert).not.toHaveBeenCalled();
 		expect(Spotify.savePlaylist).not.toHaveBeenCalled();
 	});
 

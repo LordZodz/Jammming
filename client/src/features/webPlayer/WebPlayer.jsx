@@ -45,6 +45,7 @@ function WebPlayer(props) {
     const [albumNameRef, scrollAlbumName] = useMarquee(current_track?.album?.name, is_active);
 
     const displayPosition = seekValue !== null ? seekValue : position;
+    const currentVolumeIcon = VOLUME_ICONS[volumeMode] ?? VOLUME_ICONS.medium;
 
     const playedPct = duration > 0 ? (displayPosition / duration) * 100 : 0;
     const isDragging = seekValue !== null;
@@ -187,7 +188,7 @@ function WebPlayer(props) {
                         aria-label={volume === 0 ? 'Unmute' : 'Mute'}
                         onClick={onMuteToggle}
                     >
-                        <img src={VOLUME_ICONS[volumeMode].src} alt={VOLUME_ICONS[volumeMode].alt} className={styles.volumeIcon} />
+                        <img src={currentVolumeIcon.src} alt={currentVolumeIcon.alt} className={styles.volumeIcon} />
                     </button>
                     <input
                         className={styles.volumeSlider}

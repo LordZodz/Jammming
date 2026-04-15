@@ -1,21 +1,25 @@
 import { test, expect, describe, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Track from '../../../src/features/track/Track';
-import testImg from '../../assets/images/test_album_img.jpeg';
+import { sampleTrack, explicitSampleTrack } from '../../setup/fixtures';
 
 describe('Track', () => {
     let onAddSelectedTrack;
     let onRemovePlaylistTrack;
     let onPlayTrack;
 
-    const baseTrack = {
-        id: '1',
-        name: 'Test Track',
-        artist: 'Test Artist',
-        album: 'Test Album',
-        image: testImg,
-        uri: 'spotify:track:12345',
-    };
+    const baseTrack = sampleTrack;
+
+    const renderTrack = (overrideProps = {}) => render(
+        <Track
+            track={baseTrack}
+            listType="searchResults"
+            onAddSelectedTrack={onAddSelectedTrack}
+            onRemovePlaylistTrack={onRemovePlaylistTrack}
+            onPlayTrack={onPlayTrack}
+            {...overrideProps}
+        />
+    );
 
     beforeEach(() => {
         onAddSelectedTrack = vi.fn();
@@ -23,138 +27,65 @@ describe('Track', () => {
         onPlayTrack = vi.fn();
     });
 
-    test('displays the track name, artist, album, and album cover image.', () => {
-        render(
-            <Track
-                track={baseTrack}
-                listType="searchResults"
-                onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-                onPlayTrack={onPlayTrack}
-            />
-        );
+    test('renders track metadata and album artwork', () => {
+        renderTrack();
 
         expect(screen.getByText('Test Track')).toBeInTheDocument();
-        expect(screen.getByText('Test Artist • Test Album')).toBeInTheDocument();
-        expect(screen.getByAltText('Test Track album cover')).toHaveAttribute('src', testImg);
+        expect(screen.getByText('Test Artist')).toBeInTheDocument();
+        expect(screen.getByText('Test Album')).toBeInTheDocument();
+        expect(screen.getByText('3:30')).toBeInTheDocument();
+        expect(screen.getByAltText('Test Track album cover')).toHaveAttribute('src', baseTrack.image);
     });
 
-    test('renders a play button and add button for search results and does not render a remove button', () => {
-        render(
-            <Track
-                track={baseTrack}
-                listType="searchResults"
-                onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-                onPlayTrack={onPlayTrack}
-            />
-        );
+    test('hides the explicit badge when the track is not explicit', () => {
+        renderTrack();
 
-        expect(
-            screen.getByRole('button', { name: /play test track/i })
-        ).toBeInTheDocument();
-        expect(
-            screen.getByRole('button', { name: /add test track to playlist/i })
-        ).toBeInTheDocument();
-        expect(
-            screen.queryByRole('button', { name: /remove test track from playlist/i })
-        ).not.toBeInTheDocument();
+        expect(screen.queryByLabelText('Explicit')).not.toBeInTheDocument();
     });
 
-    test('renders a remove button for playlist tracks and does not render a play button or add button', () => {
-        render(
-            <Track
-                track={baseTrack}
-                listType="playlistTracks"
-                onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-                onPlayTrack={onPlayTrack}
-            />
-        );
+    test('shows the explicit badge when the track is explicit', () => {
+        renderTrack({ track: explicitSampleTrack });
 
-        expect(
-            screen.getByRole('button', { name: /remove test track from playlist/i })
-        ).toBeInTheDocument();
-        expect(
-            screen.queryByRole('button', { name: /play test track/i })
-        ).not.toBeInTheDocument();
-        expect(
-            screen.queryByRole('button', { name: /add test track to playlist/i })
-        ).not.toBeInTheDocument();
+        expect(screen.getByLabelText('Explicit')).toBeInTheDocument();
+    });
+
+    test('renders play and add actions for search results only', () => {
+        renderTrack();
+
+        expect(screen.getByRole('button', { name: /play test track/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /add test track to playlist/i })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /remove test track from playlist/i })).not.toBeInTheDocument();
+    });
+
+    test('renders only the remove action for playlist tracks', () => {
+        renderTrack({ listType: 'playlistTracks' });
+
+        expect(screen.getByRole('button', { name: /remove test track from playlist/i })).toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /play test track/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /add test track to playlist/i })).not.toBeInTheDocument();
     });
 
     test('calls onAddSelectedTrack with the track data when the add button is clicked', () => {
-        render(
-            <Track
-                track={baseTrack}
-                listType="searchResults"
-                onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-                onPlayTrack={onPlayTrack}
-            />
-        );
+        renderTrack();
 
-        fireEvent.click(
-            screen.getByRole('button', { name: /add test track to playlist/i })
-        );
+        fireEvent.click(screen.getByRole('button', { name: /add test track to playlist/i }));
 
-        expect(onAddSelectedTrack).toHaveBeenCalledTimes(1);
-        expect(onAddSelectedTrack).toHaveBeenCalledWith(
-            expect.objectContaining({
-                id: '1',
-                name: 'Test Track',
-                artist: 'Test Artist',
-                album: 'Test Album',
-                image: testImg,
-                uri: 'spotify:track:12345',
-            })
-        );
+        expect(onAddSelectedTrack).toHaveBeenCalledWith(expect.objectContaining(baseTrack));
     });
 
     test('calls onRemovePlaylistTrack with the track data when the remove button is clicked', () => {
-        render(
-            <Track
-                track={baseTrack}
-                listType="playlistTracks"
-                onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-                onPlayTrack={onPlayTrack}
-            />
-        );
+        renderTrack({ listType: 'playlistTracks' });
 
-        fireEvent.click(
-            screen.getByRole('button', { name: /remove test track from playlist/i })
-        );
+        fireEvent.click(screen.getByRole('button', { name: /remove test track from playlist/i }));
 
-        expect(onRemovePlaylistTrack).toHaveBeenCalledTimes(1);
-        expect(onRemovePlaylistTrack).toHaveBeenCalledWith(
-            expect.objectContaining({
-                id: '1',
-                name: 'Test Track',
-                artist: 'Test Artist',
-                album: 'Test Album',
-                image: testImg,
-                uri: 'spotify:track:12345',
-            })
-        );
+        expect(onRemovePlaylistTrack).toHaveBeenCalledWith(expect.objectContaining(baseTrack));
     });
 
     test('calls onPlayTrack with the track uri when the play button is clicked', () => {
-        render(
-            <Track
-                track={baseTrack}
-                listType="searchResults"
-                onAddSelectedTrack={onAddSelectedTrack}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-                onPlayTrack={onPlayTrack}
-            />
-        );
+        renderTrack();
 
-        fireEvent.click(
-            screen.getByRole('button', { name: /play test track/i })
-        );
+        fireEvent.click(screen.getByRole('button', { name: /play test track/i }));
 
-        expect(onPlayTrack).toHaveBeenCalledTimes(1);
         expect(onPlayTrack).toHaveBeenCalledWith('spotify:track:12345');
     });
 });

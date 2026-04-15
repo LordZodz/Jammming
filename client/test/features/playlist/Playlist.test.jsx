@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, afterEach, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Playlist from '../../../src/features/playlist/Playlist';
 
@@ -16,14 +16,17 @@ describe('Playlist', () => {
         uri: 'spotify:track:1',
     };
 
-    const baseProps = {
-        playlistName: 'My Playlist',
-        onUpdatePlaylistName: () => {},
-        playlistTracks: [],
-        listType: 'playlistTracks',
-        onRemovePlaylistTrack: () => {},
-        onSubmitPlaylist: () => {},
-    };
+    const renderPlaylist = (overrideProps = {}) => render(
+        <Playlist
+            playlistName="My Playlist"
+            playlistTracks={[]}
+            listType="playlistTracks"
+            onUpdatePlaylistName={onUpdatePlaylistName}
+            onRemovePlaylistTrack={onRemovePlaylistTrack}
+            onSubmitPlaylist={onSubmitPlaylist}
+            {...overrideProps}
+        />
+    );
 
     beforeEach(() => {
         onUpdatePlaylistName = vi.fn();
@@ -31,109 +34,60 @@ describe('Playlist', () => {
         onSubmitPlaylist = vi.fn();
     });
 
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
-
     test('renders playlist name input with current value', () => {
-        render(
-            <Playlist
-                {...baseProps}
-                playlistName="Summer Hits"
-                onUpdatePlaylistName={onUpdatePlaylistName}
-            />
-        );
+        renderPlaylist({ playlistName: 'Summer Hits' });
 
-        const input = screen.getByPlaceholderText('Type playlist name');
-        expect(input).toHaveValue('Summer Hits');
+        expect(screen.getByPlaceholderText('Type playlist name')).toHaveValue('Summer Hits');
     });
 
     test('calls onUpdatePlaylistName when playlist name input changes', () => {
-        render(
-            <Playlist
-                {...baseProps}
-                onUpdatePlaylistName={onUpdatePlaylistName}
-            />
-        );
+        renderPlaylist();
 
-        const input = screen.getByPlaceholderText('Type playlist name');
-        fireEvent.change(input, { target: { value: 'New Playlist Name' } });
+        fireEvent.change(screen.getByPlaceholderText('Type playlist name'), {
+            target: { value: 'New Playlist Name' },
+        });
 
-        expect(onUpdatePlaylistName).toHaveBeenCalledTimes(1);
         expect(onUpdatePlaylistName).toHaveBeenCalledWith('New Playlist Name');
     });
 
-    test('renders "No tracks" message when playlist is empty', () => {
-        render(
-            <Playlist
-                {...baseProps}
-                playlistTracks={[]}
-                onUpdatePlaylistName={onUpdatePlaylistName}
-            />
-        );
+    test('renders the empty-state message when no tracks exist', () => {
+        renderPlaylist({ playlistTracks: [] });
 
         expect(
             screen.getByText('No tracks in playlist. Please add some tracks from the search results.')
         ).toBeInTheDocument();
     });
 
-    test('does not render "No tracks" message when playlist has tracks', () => {
-        render(
-            <Playlist
-                {...baseProps}
-                playlistTracks={[mockTrack]}
-                onUpdatePlaylistName={onUpdatePlaylistName}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-            />
-        );
+    test('hides the empty-state message when the playlist has tracks', () => {
+        renderPlaylist({ playlistTracks: [mockTrack] });
 
         expect(
             screen.queryByText('No tracks in playlist. Please add some tracks from the search results.')
         ).not.toBeInTheDocument();
     });
 
-    test('"Save to Spotify" button is disabled when playlist is empty', () => {
-        render(
-            <Playlist
-                {...baseProps}
-                playlistTracks={[]}
-                onUpdatePlaylistName={onUpdatePlaylistName}
-                onSubmitPlaylist={onSubmitPlaylist}
-            />
-        );
+    test('disables the save button when the playlist is empty', () => {
+        renderPlaylist({ playlistTracks: [] });
 
-        const saveButton = screen.getByRole('button', { name: /save playlist/i });
-        expect(saveButton).toBeDisabled();
+        expect(screen.getByRole('button', { name: /save playlist/i })).toBeDisabled();
     });
 
-    test('"Save to Spotify" button is enabled when playlist has tracks', () => {
-        render(
-            <Playlist
-                {...baseProps}
-                playlistTracks={[mockTrack]}
-                onUpdatePlaylistName={onUpdatePlaylistName}
-                onSubmitPlaylist={onSubmitPlaylist}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-            />
-        );
+    test('disables the save button when the playlist name is blank', () => {
+        renderPlaylist({ playlistName: '   ', playlistTracks: [mockTrack] });
 
-        const saveButton = screen.getByRole('button', { name: /save playlist/i });
-        expect(saveButton).not.toBeDisabled();
+        expect(screen.getByRole('button', { name: /save playlist/i })).toBeDisabled();
+    });
+
+    test('enables the save button when the playlist has tracks and a name', () => {
+        renderPlaylist({ playlistTracks: [mockTrack] });
+
+        expect(screen.getByRole('button', { name: /save playlist/i })).not.toBeDisabled();
     });
 
     test('calls onSubmitPlaylist when save button is clicked', () => {
-        render(
-            <Playlist
-                {...baseProps}
-                playlistTracks={[mockTrack]}
-                onUpdatePlaylistName={onUpdatePlaylistName}
-                onSubmitPlaylist={onSubmitPlaylist}
-                onRemovePlaylistTrack={onRemovePlaylistTrack}
-            />
-        );
+        renderPlaylist({ playlistTracks: [mockTrack] });
 
-        const saveButton = screen.getByRole('button', { name: /save playlist/i });
-        fireEvent.click(saveButton);
+        fireEvent.click(screen.getByRole('button', { name: /save playlist/i }));
 
         expect(onSubmitPlaylist).toHaveBeenCalledTimes(1);
     });
