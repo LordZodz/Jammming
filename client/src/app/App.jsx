@@ -7,7 +7,6 @@ import WebPlayerContainer from '../features/webPlayer/WebPlayerContainer';
 import styles from './app.module.css';
 import Login from '../features/login/Login';
 import { AUTH_TOKEN, Spotify } from '../utils/api_spotify/spotify';
-import bg_jammming from '../assets/images/BGs/bg_jammming_concert_nainoa_shizuru.jpg';
 
 /**
  * This is the main App component of the React application.
@@ -79,9 +78,7 @@ function App() {
             {!isAuthenticated
                 ? <Login />
                 : <>
-                    <div className={styles.headerContainer}>
-                        <Header />
-                    </div>
+                    <Header />
                     <div className={styles.mainContainer}>
                         <div className={styles.searchBarContainer}>
                             <SearchBarContainer onSearch={handleSearch} />

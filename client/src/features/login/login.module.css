@@ -8,7 +8,7 @@
 }
 
 .loginButton {
-    background-color: #1DB954; /* Spotify Green */
+    background-color: var(--brand-color);
     color: white;
     border: none;
     padding: 15px 30px;
@@ -19,5 +19,5 @@
 }
 
 .loginButton:hover {
-    background-color: #1ed760; /* Lighter Spotify Green on hover */
+    background-color: var(--brand-color-hover);
 }

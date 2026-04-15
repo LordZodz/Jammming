@@ -5,7 +5,7 @@
 
 .appContainer {
     margin: 0 auto;
-    min-width: 900px;
+    min-width: var(--app-min-width);
     min-height: 100vh;
     position: relative;
     isolation: isolate;
@@ -34,10 +34,6 @@
     z-index: -1;
 }
 
-.headerContainer {
-    padding: 0;
-}
-
 .mainContainer {
     margin: 0 auto;
     display: grid;
@@ -55,12 +51,16 @@
 }
 
 .resultsContainer {
+    width: min(100%, 1280px);
     margin: 0 auto;
+    padding: 0 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 1280px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    min-width: var(--app-min-width);
     align-items: start;
-    justify-items: center;
+    justify-items: stretch;
+    box-sizing: border-box;
 }
 
 .webPlayerContainer {

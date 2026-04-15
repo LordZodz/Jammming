@@ -14,10 +14,10 @@ import volumeMediumIcon from '../../assets/images/UI/volume_medium.svg';
 import volumeHighIcon from '../../assets/images/UI/volume_high.svg';
 
 const VOLUME_ICONS = {
-    muted:  { src: muteIcon,          alt: 'Muted' },
-    low:    { src: volumeLowIcon,     alt: 'Low volume' },
-    medium: { src: volumeMediumIcon,  alt: 'Medium volume' },
-    high:   { src: volumeHighIcon,    alt: 'High volume' },
+    muted: { src: muteIcon, alt: 'Muted' },
+    low: { src: volumeLowIcon, alt: 'Low volume' },
+    medium: { src: volumeMediumIcon, alt: 'Medium volume' },
+    high: { src: volumeHighIcon, alt: 'High volume' },
 };
 
 const buildSliderGradient = (valuePct, hover) => {
@@ -42,6 +42,7 @@ function WebPlayer(props) {
     const [hoverVolume, setHoverVolume] = useState({ visible: false, pct: 0 });
     const [trackNameRef, scrollTrackName] = useMarquee(current_track?.name, is_active);
     const [artistNameRef, scrollArtistName] = useMarquee(current_track?.artists?.[0]?.name, is_active);
+    const [albumNameRef, scrollAlbumName] = useMarquee(current_track?.album?.name, is_active);
 
     const displayPosition = seekValue !== null ? seekValue : position;
 
@@ -82,6 +83,12 @@ function WebPlayer(props) {
                         >
                             {current_track?.artists?.[0]?.name}
                         </p>
+                        <p
+                            className={`${styles.albumName} ${scrollAlbumName ? styles.albumNameScroll : ''}`}
+                            ref={albumNameRef}
+                        >
+                            {current_track?.album?.name}
+                        </p>
                     </div>
                 </div>
                 <div className={styles.webPlayerMain}>
@@ -117,20 +124,6 @@ function WebPlayer(props) {
                                 src={playNextIcon}
                                 alt="Next track"
                                 className={styles.nextTrackIcon}
-                            />
-                        </button>
-                        <button
-                            className={`${styles.controlButtons}${repeatMode > 0 ? ` ${styles.controlButtonsActive}` : ''}`}
-                            aria-label={['Repeat off', 'Repeat all', 'Repeat track'][repeatMode]}
-                            onClick={onRepeatChange}
-                        >
-                            <span
-                                aria-hidden="true"
-                                className={`${styles.repeatIcon}${repeatMode > 0 ? ` ${styles.repeatIconActive}` : ''}`}
-                                style={{
-                                    maskImage: `url(${repeatMode === 2 ? repeatTrackIcon : repeatIcon})`,
-                                    WebkitMaskImage: `url(${repeatMode === 2 ? repeatTrackIcon : repeatIcon})`,
-                                }}
                             />
                         </button>
                     </div>
@@ -176,11 +169,25 @@ function WebPlayer(props) {
                 </div>
                 <div className={styles.webPlayerMisc}>
                     <button
+                        className={`${styles.controlButtons}${repeatMode > 0 ? ` ${styles.controlButtonsActive}` : ''}`}
+                        aria-label={['Repeat off', 'Repeat all', 'Repeat track'][repeatMode]}
+                        onClick={onRepeatChange}
+                    >
+                        <span
+                            aria-hidden="true"
+                            className={`${styles.repeatIcon}${repeatMode > 0 ? ` ${styles.repeatIconActive}` : ''}`}
+                            style={{
+                                maskImage: `url(${repeatMode === 2 ? repeatTrackIcon : repeatIcon})`,
+                                WebkitMaskImage: `url(${repeatMode === 2 ? repeatTrackIcon : repeatIcon})`,
+                            }}
+                        />
+                    </button>
+                    <button
                         className={`${styles.controlButtons}${volume === 0 ? ` ${styles.controlButtonsActive}` : ''}`}
                         aria-label={volume === 0 ? 'Unmute' : 'Mute'}
                         onClick={onMuteToggle}
                     >
-                        <img src={VOLUME_ICONS[volumeMode].src} alt={VOLUME_ICONS[volumeMode].alt} />
+                        <img src={VOLUME_ICONS[volumeMode].src} alt={VOLUME_ICONS[volumeMode].alt} className={styles.volumeIcon} />
                     </button>
                     <input
                         className={styles.volumeSlider}

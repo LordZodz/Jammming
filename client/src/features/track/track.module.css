@@ -6,7 +6,6 @@
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.1);
     align-items: center;
-    column-gap: 8px;
 }
 
 .trackBox img {
@@ -15,11 +14,10 @@
 
 .trackDetails {
     display: flex;
-    flex-direction: row;
     gap: 15px;
     align-items: center;
-    min-width: 0;
     overflow: hidden;
+    min-width: 0;
 }
 
 .albumCoverContainer {
@@ -41,8 +39,8 @@
     flex-direction: column;
     gap: 2px;
     flex: 1;
-    min-width: 0;
     overflow: hidden;
+    min-width: 0;
 }
 
 .textInfo p {

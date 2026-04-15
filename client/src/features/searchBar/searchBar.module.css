@@ -3,7 +3,6 @@
     justify-content: center;
     width: 500px;
     height: 64px;
-    margin: 20px 0;
 }
 
 .searchForm {
@@ -16,7 +15,7 @@
 .searchInputGroup {
     display: flex;
     width: 100%;
-    border-radius: 64px;
+    border-radius: 16px;
     background-color: #292929;
     overflow: hidden;
     box-sizing: border-box;
@@ -48,7 +47,7 @@
     font-weight: bold;
     border: 2px solid transparent;
     border-right: none;
-    border-radius: 64px 0 0 64px;
+    border-radius: 16px 0 0 16px;
     box-sizing: border-box;
     background: transparent;
     color: var(--font-color-default);
@@ -93,5 +92,4 @@
 .searchButton:disabled {
     background-color: rgba(255, 255, 255, 0.5);
     cursor: not-allowed;
-    transform: none;
 }

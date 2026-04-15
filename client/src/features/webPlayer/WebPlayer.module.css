@@ -45,7 +45,7 @@
     align-items: center;
     justify-content: flex-start;
     gap: 16px;
-    min-width: 0;
+    min-width: 175px;
 }
 
 .webPlayerMain {
@@ -54,7 +54,7 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
-    min-width: 280px;
+    min-width: 250px;
 }
 
 .webPlayerMisc {
@@ -63,15 +63,16 @@
     align-items: center;
     justify-content: flex-end;
     gap: 12px;
-    min-width: 0;
+    min-width: 175px;
 }
 
 .albumCover {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 4px;
     object-fit: cover;
     flex-shrink: 0;
+    image-rendering: auto;
 }
 
 .trackInfo {
@@ -86,7 +87,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    will-change: transform;
 }
 
 .trackNameScroll {
@@ -94,6 +94,7 @@
     overflow: visible;
     text-overflow: clip;
     animation: marqueeScroll 10s ease-in-out infinite;
+    will-change: transform;
 }
 
 .artistName {
@@ -103,7 +104,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    will-change: transform;
 }
 
 .artistNameScroll {
@@ -111,6 +111,24 @@
     overflow: visible;
     text-overflow: clip;
     animation: marqueeScroll 10s ease-in-out infinite;
+    will-change: transform;
+}
+
+.albumName {
+    margin: 2px 0 0;
+    font-size: 12px;
+    opacity: 0.85;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.albumNameScroll {
+    display: inline-block;
+    overflow: visible;
+    text-overflow: clip;
+    animation: marqueeScroll 10s ease-in-out infinite;
+    will-change: transform;
 }
 
 .trackControls {
@@ -151,24 +169,13 @@
     color: var(--brand-color);
 }
 
-.controlButtonsActive:hover {
-    transform: scale(1.2);
-    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease-out;
-}
-
-.controlButtonsActive:active {
-    transform: scale(0.95);
-    opacity: 0.65;
-    transition: transform 0.1s ease-in, opacity 0.1s ease-in;
-}
-
 .playPauseIcon {
     width: 34px;
     height: 34px;
     display: block;
 }
 
-.prevTrackIcon, .nextTrackIcon, .repeatIcon {
+.prevTrackIcon, .nextTrackIcon, .volumeIcon, .repeatIcon {
     width: 18px;
     height: 18px;
     display: block;

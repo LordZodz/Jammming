@@ -1,9 +1,9 @@
 .playlistContainer {
     display: flex;
     flex-direction: column;
-    max-width: 95%;
+    width: 100%;
+    min-width: 0;
     align-items: center;
-    gap: 20px;
     margin: 20px 0;
     border-radius: 16px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -13,27 +13,70 @@
     width: 100%;
     padding: 16px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.h2 {
-    font-size: 32px;
-    font-weight: bold;
-    text-align: left;
+.playlistInputGroup {
+    display: flex;
     width: 100%;
-    margin: 5px 0 10px 0;
+    height: 48px;
+    border-radius: 16px;
+    background-color: #292929;
+    overflow: hidden;
+    box-sizing: border-box;
+    will-change: transform;
+    transition: background-color 0.3s ease-in-out, filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.playlistInputGroup:hover {
+    background-color: #343434;
+}
+
+.playlistInputGroup:focus-within {
+    background-color: #343434;
+    transform: scale(1.02);
+}
+
+.playlistInputGroup:has(.saveButton:active:not(:disabled)),
+.playlistInputGroupPressed {
+    filter: brightness(0.75);
+    transform: scale(0.97);
+    transition: background-color 0.3s ease-in-out, transform 0.1s ease-in;
 }
 
 .playlistNameInput {
-    width: 100%;
-    padding: 0px;
-    border: none;
+    flex: 1;
+    padding: 20px 24px;
+    border: 2px solid transparent;
+    border-right: none;
+    border-radius: 16px 0 0 16px;
+    box-sizing: border-box;
     outline: none;
-    text-align: left;
+    background: transparent;
     font-family: var(--font-primary);
-    font-size: 32px;
+    font-size: 18px;
     font-weight: bold;
-    background-color: transparent;
     color: var(--font-color-default);
+    min-width: 0;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.playlistNameInput::placeholder {
+    color: var(--font-color-placeholder);
+}
+
+.playlistInputGroup:hover .playlistNameInput {
+    border-color: #4a4a4a;
+}
+
+.playlistInputGroup:focus-within .playlistNameInput {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.playlistInputGroup:focus-within:has(.saveButton:not(:disabled)) .playlistNameInput:not(:placeholder-shown) {
+    border-color: var(--brand-color);
 }
 
 .playlistList {
@@ -46,45 +89,27 @@
 .noTracks {
     font-size: 14px;
     text-align: center;
-    
 }
 
 .saveButton {
-    width: 250px;
-    align-self: center;
-    margin-top: 25px;
-    padding: 10px 20px;
+    padding: 0 24px;
     border: none;
-    border-radius: 64px;
+    min-width: 0;
     background-color: var(--brand-color);
-    color: black;
+    color: #09200e;
     font-family: var(--font-primary);
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out, filter 0.3s ease-in-out, transform 0.3s ease-in-out;
-    will-change: transform, filter;
+    white-space: nowrap;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .saveButton:hover {
     background-color: var(--brand-color-hover);
-    transform: scale(1.02);
-}
-
-.saveButton:focus-visible {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
 }
 
 .saveButton:disabled {
     background-color: rgba(255, 255, 255, 0.5);
     cursor: not-allowed;
-    transform: none;
-    filter: none;
-}
-
-.saveButton:active:not(:disabled) {
-    filter: brightness(0.75);
-    transform: scale(0.97);
-    transition: background-color 0.3s ease-in-out, transform 0.1s ease-in, filter 0.1s ease-in;
 }

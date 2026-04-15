@@ -2,10 +2,12 @@
     display: grid;
     grid-template-columns: 1fr auto auto;
     gap: 6px 8px;
+    min-width: 0;
 }
 
 .playlistTracklist {
     display: grid;
     grid-template-columns: 1fr auto auto;
     gap: 6px 8px;
+    min-width: 0;
 }

@@ -1,20 +1,42 @@
+import { useRef } from 'react';
 import styles from './playlist.module.css';
 import Tracklist from '../tracklist/Tracklist';
 
 function Playlist(props) {
 
+    const groupRef = useRef(null);
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && props.playlistName.trim()) {
+            groupRef.current?.classList.add(styles.playlistInputGroupPressed);
+            setTimeout(() => {
+                groupRef.current?.classList.remove(styles.playlistInputGroupPressed);
+            }, 150);
+        }
+    };
+
     return (
         <div className={styles.playlistContainer}>
             <form className={styles.playlist}>
-                <h2 className={styles.h2}>
+                <div ref={groupRef} className={styles.playlistInputGroup}>
                     <input
                         type="text"
                         className={styles.playlistNameInput}
                         value={props.playlistName}
                         placeholder='Type playlist name'
                         onChange={(e) => props.onUpdatePlaylistName(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
-                </h2>
+                    <button
+                        className={styles.saveButton}
+                        type="button"
+                        aria-label="Save playlist"
+                        onClick={props.onSubmitPlaylist}
+                        disabled={props.playlistTracks.length === 0 || !props.playlistName.trim()}
+                    >
+                        Save to Spotify
+                    </button>
+                </div>
                 <div className={styles.playlistList}>
                     {props.playlistTracks.length === 0 ? (
                         <p className={styles.noTracks}>No tracks in playlist. Please add some tracks from the search results.</p>
@@ -25,15 +47,6 @@ function Playlist(props) {
                             onRemovePlaylistTrack={props.onRemovePlaylistTrack}
                         />
                     )}
-                    <button
-                        className={styles.saveButton}
-                        type="button"
-                        aria-label="Save playlist"
-                        onClick={props.onSubmitPlaylist}
-                        disabled={props.playlistTracks.length === 0}
-                    >
-                        Save to Spotify
-                    </button>
                 </div>
             </form>
         </div>

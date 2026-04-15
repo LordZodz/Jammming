@@ -5,11 +5,13 @@
     --brand-color: #1ed760;
     --brand-color-rgb: 30, 215, 96;
     --brand-color-hover: #44ea7e;
+    --app-min-width: 900px;
 }
 
 body {
     margin: 0;
     padding: 0;
+    min-width: var(--app-min-width);
     background-color: #23482b;
     color: var(--font-color-default);
     font-family: var(--font-primary);
