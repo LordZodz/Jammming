@@ -6,6 +6,10 @@
     "client-test": "npm --prefix client run test",
     "server-dev": "npm --prefix server run dev",
     "server-test": "npm --prefix server run test",
-    "build": "npm --prefix client run build"
+    "client-build": "npm --prefix client run build",
+    "server-build": "npm --prefix server run build",
+    "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+    "test": "concurrently \"npm run server-test\" \"npm run client-test\"",
+    "build": "npm run server-build && npm run client-build"
   }
 }
