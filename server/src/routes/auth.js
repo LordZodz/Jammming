@@ -8,6 +8,8 @@ const router = express.Router();
 
 const STATE_COOKIE = 'spotify_auth_state';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 router.get('/login', (req, res) => {
     const logger = createRequestLogger();
     logger.log('Initiating Spotify login flow');
@@ -39,7 +41,7 @@ router.get('/callback', async (req, res) => {
     const logger = createRequestLogger();
     const { code, state, error } = req.query;
     const storedState = req.cookies[STATE_COOKIE];
-    const clientBaseUrl = process.env.CLIENT_BASE_URL || 'http://localhost:5173';
+    const clientBaseUrl = isProduction ? process.env.CLIENT_PROD_URL : process.env.CLIENT_DEV_URL || 'http://localhost:5173';
 
     res.clearCookie(STATE_COOKIE);
 

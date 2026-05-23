@@ -46,7 +46,7 @@ const clientDistPath = path.join(__dirname, '../../client/dist');
 // - cookieParser() to parse cookies from incoming requests
 app.use(express.json());
 app.use(cors({
-    origin: process.env.CLIENT_BASE_URL,
+    origin: isProduction ? process.env.CLIENT_PROD_URL : process.env.CLIENT_DEV_URL,
     credentials: true,
 }));
 app.use(cookieParser());
