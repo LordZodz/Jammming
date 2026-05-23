@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import authRouter from './routes/auth.js';
 import searchRouter from './routes/search.js';
 import mePlaylistsRouter from './routes/mePlaylists.js';
@@ -9,10 +11,13 @@ import playlistRouter from './routes/playlist.js';
 import playerRouter from './routes/player.js';
 import { createRequestLogger } from './util/formatHelpers.js';
 
-// load environment variables from .env file. 
-// If there's an error, log it and exit the process.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables from .env file if present.
+// In production, env vars are typically set by the hosting platform, so a missing .env file is not fatal.
 const configResult = config();
-if (configResult.error) {
+if (configResult.error && configResult.error.code !== 'ENOENT') {
     const logger = createRequestLogger();
     logger.error('Error loading .env file:', configResult.error);
     process.exit(1);
@@ -31,6 +36,10 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
 // Create an instance of the Express application
 const app = express();
 
+// In production, serve the built React client from client/dist/
+const isProduction = process.env.NODE_ENV === 'production';
+const clientDistPath = path.join(__dirname, '../../client/dist');
+
 // Middleware setup:
 // - express.json() to parse JSON request bodies
 // - cors() to enable Cross-Origin Resource Sharing with the client application, allowing credentials (cookies) to be included in requests
@@ -42,12 +51,23 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
+if (isProduction) {
+    app.use(express.static(clientDistPath));
+}
+
 // Route handlers for authentication, search, and playlist management are mounted on their respective paths.
 app.use('/auth', authRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/me/playlists', mePlaylistsRouter);
 app.use('/api/playlists', playlistRouter);
 app.use('/api/player', playerRouter);
+
+// In production, fall back to index.html for any unmatched routes (client-side routing).
+if (isProduction) {
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(clientDistPath, 'index.html'));
+    });
+}
 
 // Global error handling middleware to catch any unhandled errors in the request processing pipeline.
 // If an error occurs, it logs the error and sends a 500 Internal Server Error response with a generic error message.
