@@ -38,13 +38,28 @@ const app = express();
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const normalizeOrigin = (url) => {
+    if (!url) return url;
+    return url.replace(/\/+$/, '');
+};
+
+const clientProdUrl = normalizeOrigin(process.env.CLIENT_PROD_URL);
+const clientDevUrl = normalizeOrigin(process.env.CLIENT_DEV_URL);
+
 // Middleware setup:
 // - express.json() to parse JSON request bodies
 // - cors() to enable Cross-Origin Resource Sharing with the client application, allowing credentials (cookies) to be included in requests
 // - cookieParser() to parse cookies from incoming requests
 app.use(express.json());
 app.use(cors({
-    origin: isProduction ? process.env.CLIENT_PROD_URL : process.env.CLIENT_DEV_URL,
+    origin: (origin, callback) => {
+        const allowedOrigin = isProduction ? clientProdUrl : clientDevUrl;
+        if (!origin || origin === allowedOrigin) {
+            callback(null, true);
+        } else {
+            callback(new Error(`CORS origin denied: ${origin}`));
+        }
+    },
     credentials: true,
 }));
 app.use(cookieParser());
