@@ -7,5 +7,6 @@
     "server-dev": "npm --prefix server run dev",
     "server-test": "npm --prefix server run test",
     "client-build": "npm --prefix client install && npm --prefix client run build"
+    "server-start": "npm --prefix server run start"
   }
 }
