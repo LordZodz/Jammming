@@ -6,12 +6,6 @@ command = "npm run client-build"
 # Node.js version
 node_version = "18"
 
-# Redirect all API calls to your server
-[[redirects]]
-from = "/api/*"
-to = "/.netlify/functions/server/:splat"
-status = 200
-
 [[redirects]]
 from = "/*"
 to = "/index.html"
