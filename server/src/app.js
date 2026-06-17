@@ -25,7 +25,7 @@ if (configResult.error && configResult.error.code !== 'ENOENT') {
 
 // Destructure necessary environment variables with default values for base URLs and port
 const base_url = process.env.SERVER_BASE_URL || 'http://localhost:3000';
-const port = process.env.SERVER_PORT || 3000;
+const port = process.env.PORT || process.env.SERVER_PORT || 3000;
 // Ensure that the Spotify client ID and secret are set in the environment variables
 if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
     const logger = createRequestLogger();
