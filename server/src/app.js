@@ -64,7 +64,7 @@ app.use('/api/player', playerRouter);
 
 // In production, fall back to index.html for any unmatched routes (client-side routing).
 if (isProduction) {
-    app.get('*', (req, res) => {
+    app.use((req, res, next) => {
         res.sendFile(path.join(clientDistPath, 'index.html'));
     });
 }
