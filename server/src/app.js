@@ -36,9 +36,7 @@ if (!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_CLIENT_SECRET) {
 // Create an instance of the Express application
 const app = express();
 
-// In production, serve the built React client from client/dist/
 const isProduction = process.env.NODE_ENV === 'production';
-const clientDistPath = path.join(__dirname, '../../client/dist');
 
 // Middleware setup:
 // - express.json() to parse JSON request bodies
@@ -51,23 +49,12 @@ app.use(cors({
 }));
 app.use(cookieParser());
 
-if (isProduction) {
-    app.use(express.static(clientDistPath));
-}
-
 // Route handlers for authentication, search, and playlist management are mounted on their respective paths.
 app.use('/auth', authRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/me/playlists', mePlaylistsRouter);
 app.use('/api/playlists', playlistRouter);
 app.use('/api/player', playerRouter);
-
-// In production, fall back to index.html for any unmatched routes (client-side routing).
-if (isProduction) {
-    app.use((req, res, next) => {
-        res.sendFile(path.join(clientDistPath, 'index.html'));
-    });
-}
 
 // Global error handling middleware to catch any unhandled errors in the request processing pipeline.
 // If an error occurs, it logs the error and sends a 500 Internal Server Error response with a generic error message.
