@@ -45,6 +45,8 @@ const normalizeOrigin = (url) => {
 
 const clientProdUrl = normalizeOrigin(process.env.CLIENT_PROD_URL);
 const clientDevUrl = normalizeOrigin(process.env.CLIENT_DEV_URL);
+const allowedOrigin = isProduction ? clientProdUrl : clientDevUrl;
+console.log(`[CORS] allowed origin: ${allowedOrigin}`);
 
 // Middleware setup:
 // - express.json() to parse JSON request bodies
@@ -53,7 +55,7 @@ const clientDevUrl = normalizeOrigin(process.env.CLIENT_DEV_URL);
 app.use(express.json());
 app.use(cors({
     origin: (origin, callback) => {
-        const allowedOrigin = isProduction ? clientProdUrl : clientDevUrl;
+        console.log(`[CORS] incoming origin: ${origin}`);
         if (!origin || origin === allowedOrigin) {
             callback(null, true);
         } else {
